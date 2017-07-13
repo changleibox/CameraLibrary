@@ -30,7 +30,7 @@
         android:layout_gravity="bottom"
         android:background="@android:color/black"
         android:divider="@drawable/camera_shape_divider_horizontal"
-        android:dividerPadding="24dp"
+        android:dividerPadding="32dp"
         android:orientation="vertical"
         android:showDividers="middle">
 
