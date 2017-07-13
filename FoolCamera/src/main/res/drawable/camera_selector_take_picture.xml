@@ -10,7 +10,7 @@
             <item android:gravity="center">
                 <shape>
                     <corners android:radius="64dp"/>
-                    <solid android:color="#77ffffff"/>
+                    <solid android:color="#55ffffff"/>
                 </shape>
             </item>
             <item
@@ -34,7 +34,7 @@
             <item android:gravity="center">
                 <shape>
                     <corners android:radius="64dp"/>
-                    <solid android:color="#77ffffff"/>
+                    <solid android:color="#55ffffff"/>
                 </shape>
             </item>
             <item
