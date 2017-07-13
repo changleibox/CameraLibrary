@@ -8,7 +8,6 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +16,16 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 
 import me.box.library.foolcamera.compat.CameraCompat;
 import me.box.library.foolcamera.ui.CameraPreview;
 import me.box.library.foolcamera.ui.Response;
+import me.box.library.foolcamera.util.CameraToastCompat;
 
-import static me.box.library.foolcamera.compat.CameraException.ERROR_OTHER;
+import static me.box.library.foolcamera.compat.CameraException.ERROR_INSUFFICIENT_MEMORY;
+import static me.box.library.foolcamera.compat.CameraException.ERROR_NO_SDCARD;
 import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_CAMERA_FACING;
 import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_PICTURE_FILE;
 import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_SCREEN_ORIENTATION;
@@ -66,7 +66,7 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         }
 
         if (!CameraCompat.hasCameraDevice(this)) {
-            showText(R.string.camera_prompt_no_camera);
+            CameraToastCompat.showText(this, R.string.camera_prompt_no_camera);
             finish();
             return;
         }
@@ -141,8 +141,12 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
             mIvPreview.setVisibility(View.VISIBLE);
             mIvPreview.setImageBitmap(BitmapFactory.decodeFile(mPictureFile.getAbsolutePath()));
         } else {
-            showText(ERROR_OTHER.equals(response.getCode()) ? getString(R.string.camera_prompt_camera_failure) : response.getMsg());
             mCameraPreview.startPreviewDisplay();
+            int code = response.getCode();
+            CameraToastCompat.showText(this,
+                    ERROR_INSUFFICIENT_MEMORY.equals(code) ? getString(R.string.camera_prompt_insufficient_memory)
+                            : ERROR_NO_SDCARD.equals(code) ? getString(R.string.camera_prompt_no_sdcard)
+                            : getString(R.string.camera_prompt_camera_failure));
         }
     }
 
@@ -186,14 +190,6 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         int cameraId = CameraCompat.getCameraId(mCameraFacing);
         mCamera = CameraCompat.openCamera(cameraId);
         mCameraPreview.switchCamera(mCamera, cameraId);
-    }
-
-    private void showText(CharSequence text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
-    }
-
-    private void showText(@StringRes int text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
     }
 
     private int getScreenOrientation() {

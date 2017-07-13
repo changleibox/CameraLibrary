@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="camera_prompt_no_facing_camera">没有前置摄像头，即将打开后置摄像头</string>
+    <string name="camera_prompt_insufficient_memory">内存不足，无法进行拍照</string>
+    <string name="camera_prompt_no_sdcard">未监测到内存卡，请插入内存卡</string>
+</resources>

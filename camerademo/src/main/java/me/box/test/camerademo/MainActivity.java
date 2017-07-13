@@ -1,28 +1,21 @@
 package me.box.test.camerademo;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
-import android.hardware.Camera.CameraInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 
-import me.box.library.foolcamera.CameraActivity;
-import me.box.library.foolcamera.provider.CameraStore;
+import me.box.library.foolcamera.provider.CameraProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,28 +49,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         mCameraFile = new File(getCachePath(this), System.currentTimeMillis() + ".jpg");
-        openCamera(this, REQUEST_CODE_CAMERA, false, mCameraFile);
-    }
-
-    @SuppressWarnings("deprecation")
-    @RequiresPermission(allOf = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})
-    public static void openCamera(Activity activity, int requestCode, boolean isFontCamera, File outputFile) {
-        PackageManager packageManager = activity.getPackageManager();
-        if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-            Toast.makeText(activity, R.string.prompt_no_camera, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Intent intentImage = new Intent(activity, CameraActivity.class);
-        intentImage.addCategory(Intent.CATEGORY_DEFAULT);
-        intentImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
-        if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
-            int facing = isFontCamera ? CameraInfo.CAMERA_FACING_FRONT : CameraInfo.CAMERA_FACING_BACK;
-            intentImage.putExtra(CameraStore.EXTRAS_CAMERA_FACING, facing);
-        } else if (isFontCamera) {
-            Toast.makeText(activity, R.string.prompt_no_facing_camera, Toast.LENGTH_SHORT).show();
-        }
-        intentImage.putExtra(CameraStore.EXTRAS_SCREEN_ORIENTATION, Configuration.ORIENTATION_UNDEFINED);
-        activity.startActivityForResult(intentImage, requestCode);
+        CameraProvider.openCamera(this, REQUEST_CODE_CAMERA, false, mCameraFile, Configuration.ORIENTATION_UNDEFINED);
     }
 
     public static String getCachePath(Context context) {
