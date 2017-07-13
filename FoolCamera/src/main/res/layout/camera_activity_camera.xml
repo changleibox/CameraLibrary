@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="bottom"
-        android:background="@android:color/black"
+        android:background="#333"
         android:divider="@drawable/camera_shape_divider_vertical"
         android:dividerPadding="24dp"
         android:orientation="horizontal"

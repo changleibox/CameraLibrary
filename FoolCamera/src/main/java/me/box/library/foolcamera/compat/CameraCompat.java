@@ -96,6 +96,7 @@ public class CameraCompat {
             }
             params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
             params.setAutoWhiteBalanceLock(true);
+            params.setColorEffect(Camera.Parameters.EFFECT_SOLARIZE);
             camera.setParameters(params);
         } catch (Exception e) {
             e.printStackTrace();
