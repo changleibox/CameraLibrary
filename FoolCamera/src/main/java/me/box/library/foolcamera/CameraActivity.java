@@ -50,10 +50,11 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        super.onCreate(savedInstanceState);
 
         if (!CameraCompat.hasCameraDevice(this)) {
             showText(R.string.camera_prompt_no_camera);
