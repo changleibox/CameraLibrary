@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_CAMERA_FACING;
 
 /**
  * Created by box on 2017/7/11.
@@ -47,7 +48,6 @@ import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
 public class CameraCompat {
 
     private static final String TAG = CameraCompat.class.getSimpleName();
-    public static final String EXTRAS_CAMERA_FACING = "android.intent.extras.CAMERA_FACING";
 
     public static int getCameraId(int cameraFacing) {
         int cameraCount;

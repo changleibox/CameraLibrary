@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera.CameraInfo;
 import android.net.Uri;
@@ -21,7 +22,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import me.box.library.foolcamera.CameraActivity;
-import me.box.library.foolcamera.compat.CameraCompat;
+import me.box.library.foolcamera.provider.CameraStore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,10 +72,11 @@ public class MainActivity extends AppCompatActivity {
         intentImage.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(outputFile));
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
             int facing = isFontCamera ? CameraInfo.CAMERA_FACING_FRONT : CameraInfo.CAMERA_FACING_BACK;
-            intentImage.putExtra(CameraCompat.EXTRAS_CAMERA_FACING, facing);
+            intentImage.putExtra(CameraStore.EXTRAS_CAMERA_FACING, facing);
         } else if (isFontCamera) {
             Toast.makeText(activity, R.string.prompt_no_facing_camera, Toast.LENGTH_SHORT).show();
         }
+        intentImage.putExtra(CameraStore.EXTRAS_SCREEN_ORIENTATION, Configuration.ORIENTATION_UNDEFINED);
         activity.startActivityForResult(intentImage, requestCode);
     }
 

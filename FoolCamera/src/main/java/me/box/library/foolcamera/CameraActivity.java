@@ -1,6 +1,7 @@
 package me.box.library.foolcamera;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -25,6 +26,9 @@ import me.box.library.foolcamera.ui.CameraPreview;
 import me.box.library.foolcamera.ui.Response;
 
 import static me.box.library.foolcamera.compat.CameraException.ERROR_OTHER;
+import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_CAMERA_FACING;
+import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_PICTURE_FILE;
+import static me.box.library.foolcamera.provider.CameraStore.EXTRAS_SCREEN_ORIENTATION;
 
 /**
  * Created by box on 2017/7/13.
@@ -34,8 +38,6 @@ import static me.box.library.foolcamera.compat.CameraException.ERROR_OTHER;
 
 @SuppressWarnings("deprecation")
 public class CameraActivity extends AppCompatActivity implements CameraPreview.PictureCallback {
-
-    private static final String KEY_PICTURE_FILE = "PictureFile";
 
     private CameraPreview mCameraPreview;
     private View mOperationContainer;
@@ -56,6 +58,13 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        int requestedOrientation = getRequestedOrientation();
+        int screenOrientation = getScreenOrientation();
+        if (requestedOrientation != screenOrientation) {
+            //noinspection WrongConstant
+            setRequestedOrientation(screenOrientation);
+        }
+
         if (!CameraCompat.hasCameraDevice(this)) {
             showText(R.string.camera_prompt_no_camera);
             finish();
@@ -63,8 +72,8 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         }
 
         if (savedInstanceState != null) {
-            mCameraFacing = savedInstanceState.getInt(CameraCompat.EXTRAS_CAMERA_FACING, -1);
-            mPictureFile = (File) savedInstanceState.getSerializable(KEY_PICTURE_FILE);
+            mCameraFacing = savedInstanceState.getInt(EXTRAS_CAMERA_FACING, -1);
+            mPictureFile = (File) savedInstanceState.getSerializable(EXTRAS_PICTURE_FILE);
         }
         if (mCameraFacing == -1) {
             mCameraFacing = CameraCompat.getExtrasCameraFacing(this);
@@ -107,8 +116,8 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(CameraCompat.EXTRAS_CAMERA_FACING, mCameraFacing);
-        outState.putSerializable(KEY_PICTURE_FILE, mPictureFile);
+        outState.putInt(EXTRAS_CAMERA_FACING, mCameraFacing);
+        outState.putSerializable(EXTRAS_PICTURE_FILE, mPictureFile);
         super.onSaveInstanceState(outState);
     }
 
@@ -185,5 +194,16 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
 
     private void showText(@StringRes int text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    private int getScreenOrientation() {
+        switch (getIntent().getIntExtra(EXTRAS_SCREEN_ORIENTATION, Configuration.ORIENTATION_UNDEFINED)) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+            case Configuration.ORIENTATION_PORTRAIT:
+                return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            default:
+                return ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+        }
     }
 }
