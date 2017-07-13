@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/black"
+             android:divider="@drawable/camera_shape_divider_horizontal"
+             android:orientation="horizontal"
+             android:showDividers="middle"
+             tools:context=".CameraActivity">
+
+    <FrameLayout
+        android:id="@+id/camera_fl_preview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/camera_iv_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:contentDescription="@string/camera_app_name"
+            android:scaleType="fitCenter"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/camera_ll_operation"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:background="@android:color/black"
+        android:divider="@drawable/camera_shape_divider_vertical"
+        android:dividerPadding="24dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onRetake"
+            android:text="@string/camera_btn_retake"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="onUse"
+            android:text="@string/camera_btn_make"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/camera_fl_take_picture"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:background="@android:color/black"
+        tools:ignore="RtlHardcoded">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:onClick="onCancel"
+            android:padding="16dp"
+            android:text="@string/camera_btn_cancel"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+        <ImageButton
+            android:id="@+id/camera_ib_take_picture"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/camera_app_name"
+            android:onClick="onTakeCamera"
+            android:scaleType="centerCrop"
+            android:src="@drawable/camera_selector_take_picture"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:onClick="onSwitchCamera"
+            android:padding="16dp"
+            android:text="@string/camera_btn_reversal"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            tools:ignore="RtlHardcoded"/>
+    </FrameLayout>
+
+</FrameLayout>
