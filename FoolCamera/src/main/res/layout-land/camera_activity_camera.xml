@@ -85,9 +85,9 @@
             android:background="@drawable/camera_selector_switch_camera"
             android:contentDescription="@string/camera_app_name"
             android:onClick="onCancel"
-            android:padding="8dp"
+            android:padding="12dp"
             android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:src="@drawable/ic_action_close"
             tools:ignore="RtlHardcoded"/>
 
         <ImageButton
@@ -110,7 +110,9 @@
             android:background="@drawable/camera_selector_switch_camera"
             android:contentDescription="@string/camera_app_name"
             android:onClick="onSwitchCamera"
-            android:src="@android:drawable/stat_notify_sync_noanim"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_switch"
             tools:ignore="RtlHardcoded"/>
 
     </FrameLayout>
