@@ -29,7 +29,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:background="@android:color/black"
-        android:divider="@drawable/camera_shape_divider_vertical"
+        android:divider="@drawable/camera_shape_divider_horizontal"
         android:dividerPadding="24dp"
         android:orientation="vertical"
         android:showDividers="middle">
