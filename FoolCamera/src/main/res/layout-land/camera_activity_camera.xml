@@ -23,58 +23,51 @@
             android:scaleType="fitCenter"/>
     </FrameLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/camera_ll_operation"
         android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:background="@android:color/black"
-        android:divider="@drawable/camera_shape_divider_horizontal"
-        android:dividerPadding="32dp"
-        android:orientation="vertical"
-        android:showDividers="middle">
+        android:layout_gravity="left"
+        android:background="#222"
+        tools:ignore="RtlHardcoded">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/camera_selector_switch_camera"
+            android:contentDescription="@string/camera_app_name"
             android:onClick="onRetake"
-            android:text="@string/camera_btn_retake"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+            android:padding="14dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_close"
+            tools:ignore="RtlHardcoded"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/camera_selector_switch_camera"
+            android:contentDescription="@string/camera_app_name"
             android:onClick="onUse"
-            android:text="@string/camera_btn_make"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
-    </LinearLayout>
+            android:padding="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_finish"
+            tools:ignore="RtlHardcoded"/>
+
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/camera_fl_take_picture"
         android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@android:color/black"
+        android:background="#222"
         tools:ignore="RtlHardcoded">
-
-        <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:onClick="onCancel"-->
-        <!--android:padding="16dp"-->
-        <!--android:text="@string/camera_btn_cancel"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="16sp"/>-->
 
         <ImageButton
             android:layout_width="40dp"
