@@ -147,6 +147,7 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
     public void onRetake(View view) {
         if (mPictureFile != null) {
             mPictureFile.deleteOnExit();
+            mPictureFile = null;
         }
         mIvPreview.setVisibility(View.GONE);
         mTakePictureContainer.setVisibility(View.VISIBLE);
