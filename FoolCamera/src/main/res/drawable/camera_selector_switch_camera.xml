@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2017 CHANGLEI. All rights reserved.
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <layer-list>
+            <item android:gravity="center">
+                <shape>
+                    <corners android:radius="40dp"/>
+                    <solid android:color="#77ffffff"/>
+                </shape>
+            </item>
+            <item
+                android:bottom="8dp"
+                android:gravity="center"
+                android:left="8dp"
+                android:right="8dp"
+                android:top="8dp">
+                <shape>
+                    <stroke android:width="2dp" android:color="@android:color/black"/>
+                    <size android:width="32dp" android:height="32dp"/>
+                    <corners android:radius="32dp"/>
+                    <solid android:color="#000"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item>
+        <layer-list>
+            <item android:gravity="center">
+                <shape>
+                    <corners android:radius="40dp"/>
+                    <solid android:color="#44ffffff"/>
+                </shape>
+            </item>
+            <item
+                android:bottom="8dp"
+                android:gravity="center"
+                android:left="8dp"
+                android:right="8dp"
+                android:top="8dp">
+                <shape>
+                    <stroke android:width="2dp" android:color="@android:color/black"/>
+                    <size android:width="32dp" android:height="32dp"/>
+                    <corners android:radius="32dp"/>
+                    <solid android:color="#000"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>
