@@ -64,18 +64,32 @@
         android:layout_gravity="bottom"
         android:background="@android:color/black">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:onClick="onCancel"-->
+        <!--android:padding="16dp"-->
+        <!--android:text="@string/camera_btn_cancel"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="18sp"/>-->
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@android:color/transparent"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/camera_selector_switch_camera"
+            android:contentDescription="@string/camera_app_name"
             android:onClick="onCancel"
-            android:padding="16dp"
-            android:text="@string/camera_btn_cancel"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            tools:ignore="RtlHardcoded"/>
 
         <ImageButton
             android:id="@+id/camera_ib_take_picture"
