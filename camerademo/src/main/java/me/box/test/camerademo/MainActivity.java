@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         mCameraFile = new File(getCachePath(this), System.currentTimeMillis() + ".jpg");
-        CameraProvider.openCamera(this, REQUEST_CODE_CAMERA, false, mCameraFile, Configuration.ORIENTATION_UNDEFINED);
+        CameraProvider.openCamera(this, REQUEST_CODE_CAMERA, true, mCameraFile, Configuration.ORIENTATION_UNDEFINED);
     }
 
     public static String getCachePath(Context context) {

@@ -53,17 +53,9 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        int requestedOrientation = getRequestedOrientation();
-        int screenOrientation = getScreenOrientation();
-        if (requestedOrientation != screenOrientation) {
-            //noinspection WrongConstant
-            setRequestedOrientation(screenOrientation);
-        }
 
         if (!CameraCompat.hasCameraDevice(this)) {
             CameraToastCompat.showText(this, R.string.camera_prompt_no_camera);
@@ -71,18 +63,19 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
             return;
         }
 
-        if (savedInstanceState != null) {
-            mCameraFacing = savedInstanceState.getInt(EXTRAS_CAMERA_FACING, -1);
-            mPictureFile = (File) savedInstanceState.getSerializable(EXTRAS_PICTURE_FILE);
-        }
-        if (mCameraFacing == -1) {
-            mCameraFacing = CameraCompat.getExtrasCameraFacing(this);
-        }
+        mCameraFacing = CameraCompat.getExtrasCameraFacing(this);
         int cameraId = CameraCompat.getCameraId(mCameraFacing);
         mCamera = CameraCompat.openCamera(cameraId);
         mCameraPreview = new CameraPreview(this, mCamera, cameraId);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mCameraPreview.setLayoutParams(params);
+
+        int requestedOrientation = getRequestedOrientation();
+        int screenOrientation = getScreenOrientation();
+        if (requestedOrientation != screenOrientation) {
+            //noinspection WrongConstant
+            setRequestedOrientation(screenOrientation);
+        }
 
         setContentView(R.layout.camera_activity_camera);
     }
