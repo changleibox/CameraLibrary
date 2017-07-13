@@ -46,6 +46,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mHolder = this.getHolder();
         mHolder.addCallback(this);
+        mHolder.setKeepScreenOn(true);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         mHolder.setFormat(PixelFormat.TRANSPARENT);
 
@@ -95,6 +96,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
+            mCamera.cancelAutoFocus();
         } catch (IOException ignored) {
             ignored.printStackTrace();
         }

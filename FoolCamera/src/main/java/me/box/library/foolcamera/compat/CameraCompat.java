@@ -71,7 +71,6 @@ public class CameraCompat {
         return activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
     }
 
-    @SuppressWarnings("unused")
     public static boolean isAutoFocusSupported(Camera.Parameters params) {
         List<String> modes = params.getSupportedFocusModes();
         return modes.contains(Camera.Parameters.FOCUS_MODE_AUTO);
@@ -92,10 +91,10 @@ public class CameraCompat {
         try {
             final Camera.Parameters params = camera.getParameters();
             params.setPictureFormat(PixelFormat.JPEG);
-            // params.setPreviewFpsRange(4, 10);
-            // params.set("jpeg-quality", 85);
-            // params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-            // params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
+            if (isAutoFocusSupported(params)) {
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
+            params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
             params.setAutoWhiteBalanceLock(true);
             camera.setParameters(params);
         } catch (Exception e) {
