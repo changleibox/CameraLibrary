@@ -39,10 +39,10 @@ final class DecodeHandler extends Handler {
 
 	@Override
 	public void handleMessage(Message message) {
-		if (message.what == R.id.decode) {// Log.d(TAG, "Got decode message");
+		if (message.what == R.id.qrcode_decode) {// Log.d(TAG, "Got decode message");
 			decode((byte[]) message.obj, message.arg1, message.arg2);
 
-		} else if (message.what == R.id.quit) {
+		} else if (message.what == R.id.qrcode_quit) {
 			Looper.myLooper().quit();
 
 		}
@@ -90,7 +90,7 @@ final class DecodeHandler extends Handler {
 			Log.d(TAG, "Found barcode (" + (end - start) + " ms):\n"
 					+ rawResult.toString());
 			Message message = Message.obtain(activity.getHandler(),
-					R.id.decode_succeeded, rawResult);
+					R.id.qrcode_decode_succeeded, rawResult);
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(DecodeThread.BARCODE_BITMAP,
 					source.renderCroppedGreyscaleBitmap());
@@ -99,7 +99,7 @@ final class DecodeHandler extends Handler {
 			message.sendToTarget();
 		} else {
 			Message message = Message.obtain(activity.getHandler(),
-					R.id.decode_failed);
+					R.id.qrcode_decode_failed);
 			message.sendToTarget();
 		}
 	}

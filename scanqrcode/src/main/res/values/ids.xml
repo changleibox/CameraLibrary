@@ -16,27 +16,25 @@
  -->
 <resources>
   <!-- Messages IDs -->
-  <item type="id" name="auto_focus"/>
-  <item type="id" name="decode"/>
-  <item type="id" name="decode_failed"/>
-  <item type="id" name="decode_succeeded"/>
-  <item type="id" name="encode_failed"/>
-  <item type="id" name="encode_succeeded"/>
-  <item type="id" name="launch_product_query"/>
-  <item type="id" name="quit"/>
-  <item type="id" name="restart_preview"/>
-  <item type="id" name="return_scan_result"/>
-  <item type="id" name="search_book_contents_failed"/>
-  <item type="id" name="search_book_contents_succeeded"/>
+  <item type="id" name="qrcode_auto_focus"/>
+  <item type="id" name="qrcode_decode"/>
+  <item type="id" name="qrcode_decode_failed"/>
+  <item type="id" name="qrcode_decode_succeeded"/>
+  <item type="id" name="qrcode_encode_failed"/>
+  <item type="id" name="qrcode_encode_succeeded"/>
+  <item type="id" name="qrcode_launch_product_query"/>
+  <item type="id" name="qrcode_quit"/>
+  <item type="id" name="qrcode_restart_preview"/>
+  <item type="id" name="qrcode_return_scan_result"/>
+  <item type="id" name="qrcode_search_book_contents_failed"/>
+  <item type="id" name="qrcode_search_book_contents_succeeded"/>
   
+  <item type="id" name="qrcode_gridview" />
+  <item type="id" name="qrcode_webview" />
   
+  <item type="id" name="qrcode_about_version_code">false</item>
+  <item type="id" name="qrcode_split">false</item>
   
-  <item type="id" name="gridview" />
-  <item type="id" name="webview" />
-  
-  <item type="id" name="about_version_code">false</item>
-  <item type="id" name="split">false</item>
-  
-  <item type="id" name="panelHandle" />
-  <item type="id" name="panelContent" />
+  <item type="id" name="qrcode_panelHandle" />
+  <item type="id" name="qrcode_panelcContent" />
 </resources>

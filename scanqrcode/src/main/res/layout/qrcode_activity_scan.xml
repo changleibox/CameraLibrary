@@ -3,25 +3,25 @@
              android:layout_height="match_parent">
 
     <SurfaceView
-        android:id="@+id/preview_view"
+        android:id="@+id/qrcode_preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"/>
 
     <com.mining.app.zxing.view.ViewfinderView
-        android:id="@+id/viewfinder_view"
+        android:id="@+id/qrcode_viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/qrcode_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:theme="?attr/actionBarTheme"/>
 
     <ImageButton
-        android:id="@+id/ib_light"
+        android:id="@+id/qrcode_ib_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
@@ -29,6 +29,6 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/app_name"
         android:onClick="onClick"
-        android:src="@drawable/btn_scan_light"/>
+        android:src="@drawable/qrcode_btn_scan_light"/>
 
 </FrameLayout>

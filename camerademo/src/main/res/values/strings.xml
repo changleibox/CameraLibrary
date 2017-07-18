@@ -3,4 +3,5 @@
     <string name="btn_take_picture">拍照</string>
     <string name="prompt_no_facing_camera">没有前置摄像头，默认打开后置摄像头</string>
     <string name="prompt_no_camera">没有拍照设备</string>
+    <string name="btn_scan_qrcode">扫描二维码</string>
 </resources>

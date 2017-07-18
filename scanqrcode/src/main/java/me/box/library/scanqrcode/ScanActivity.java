@@ -99,12 +99,12 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.qrcode_activity_scan);
 
-        mIbLight = (ImageButton) findViewById(R.id.ib_light);
-        mFinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
+        mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
+        mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.qrcode_toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -119,7 +119,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
 
         Uri extras = getIntent().getData();
         String prompt = extras == null ? null : extras.getQueryParameter(Key.KEY_SCAN_PROMPT);
-        mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.label_default_scan_prompt) : prompt);
+        mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.qrcode_label_default_scan_prompt) : prompt);
         mFinderView.setRate(RATE_SCAN);
         mFinderView.setLocationRate(RATE_LOCATION);
 
@@ -129,7 +129,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if (i == R.id.ib_light) {
+        if (i == R.id.qrcode_ib_light) {
             switchFlashLight(v);
         }
     }
@@ -139,7 +139,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     public void onResume() {
         super.onResume();
 
-        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
+        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.qrcode_preview_view);
         if (surfaceView == null) {
             return;
         }
@@ -194,7 +194,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
                     surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
                 }
             } else {
-                ToastCompat.showText(ScanActivity.this, R.string.sign_toast_please_start_pic);
+                ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_please_start_pic);
                 finish();
             }
         }
@@ -214,7 +214,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         } catch (IOException ioe) {
             return;
         } catch (RuntimeException e) {
-            ToastCompat.showText(ScanActivity.this, R.string.sign_toast_please_start_pic);
+            ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_please_start_pic);
             finish();
             return;
         }
@@ -321,7 +321,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
                     onResultHandler((String) msg.obj);
                     break;
                 case PARSE_BARCODE_FAIL:
-                    ToastCompat.showText(ScanActivity.this, R.string.toast_scan_failure);
+                    ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_scan_failure);
                     break;
 
             }

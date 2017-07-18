@@ -83,17 +83,17 @@ public final class ViewfinderView extends View {
 
         paint = new Paint();
         Resources resources = getResources();
-        maskColor = resources.getColor(R.color.viewfinder_mask);
-        resultColor = resources.getColor(R.color.result_view);
-        blue = resources.getColor(R.color.colorQrcodeBorder);
+        maskColor = resources.getColor(R.color.qrcode_viewfinder_mask);
+        resultColor = resources.getColor(R.color.qrcode_result_view);
+        blue = resources.getColor(R.color.qrcode_color_qrcode_border);
 
-        resultPointColor = resources.getColor(R.color.possible_result_points);
+        resultPointColor = resources.getColor(R.color.qrcode_possible_result_points);
         possibleResultPoints = new HashSet<>(5);
 
-        lineDrawable = getResources().getDrawable(R.drawable.img_scan_diver);
+        lineDrawable = getResources().getDrawable(R.drawable.qrcode_img_scan_diver);
         mRect = new Rect();
 
-        mText = getResources().getString(R.string.label_default_scan_prompt);
+        mText = getResources().getString(R.string.qrcode_label_default_scan_prompt);
     }
 
     public void setText(CharSequence sequence) {
@@ -191,7 +191,7 @@ public final class ViewfinderView extends View {
             }
 
             paint.setColor(Color.WHITE);
-            paint.setTextSize(getResources().getDimension(R.dimen.sizeTextNormal));
+            paint.setTextSize(getResources().getDimension(R.dimen.qrcode_sizeTextNormal));
             paint.setAlpha(140);
             paint.setAntiAlias(true);
             paint.setTextAlign(Paint.Align.CENTER);

@@ -12,16 +12,19 @@
         android:padding="16dp">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="takePicture"
-            android:text="Take Picture"/>
+            android:padding="8dp"
+            android:text="@string/btn_take_picture"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:onClick="scanQrcode"
-            android:text="Scan Qrcode"/>
+            android:padding="8dp"
+            android:text="@string/btn_scan_qrcode"/>
     </LinearLayout>
 
 </ScrollView>

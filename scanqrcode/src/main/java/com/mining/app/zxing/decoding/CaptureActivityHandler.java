@@ -54,21 +54,21 @@ public final class CaptureActivityHandler extends Handler {
 
 	@Override
 	public void handleMessage(Message message) {
-		if (message.what == R.id.auto_focus) {// Log.d(TAG, "Got auto-focus message");
+		if (message.what == R.id.qrcode_auto_focus) {// Log.d(TAG, "Got auto-focus message");
 			// When one auto focus pass finishes, start another. This is the
 			// closest thing to
 			// continuous AF. It does seem to hunt a bit, but I'm not sure what
 			// else to do.
 			if (state == State.PREVIEW) {
 				CameraManager.getInstance().requestAutoFocus(this,
-						R.id.auto_focus);
+						R.id.qrcode_auto_focus);
 			}
 
-		} else if (message.what == R.id.restart_preview) {
+		} else if (message.what == R.id.qrcode_restart_preview) {
 			Log.d(TAG, "Got restart preview message");
 			restartPreviewAndDecode();
 
-		} else if (message.what == R.id.decode_succeeded) {
+		} else if (message.what == R.id.qrcode_decode_succeeded) {
 			Log.d(TAG, "Got decode succeeded message");
 			state = State.SUCCESS;
 			Bundle bundle = message.getData();
@@ -80,18 +80,18 @@ public final class CaptureActivityHandler extends Handler {
 			activity.handleDecode((Result) message.obj, barcode);// ���ؽ��?
 			// /***********************************************************************/
 
-		} else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails,
+		} else if (message.what == R.id.qrcode_decode_failed) {// We're decoding as fast as possible, so when one decode fails,
 			// start another.
 			state = State.PREVIEW;
 			CameraManager.getInstance().requestPreviewFrame(
-					decodeThread.getHandler(), R.id.decode);
+					decodeThread.getHandler(), R.id.qrcode_decode);
 
-		} else if (message.what == R.id.return_scan_result) {
+		} else if (message.what == R.id.qrcode_return_scan_result) {
 			Log.d(TAG, "Got return scan result message");
 			activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
 			activity.finish();
 
-		} else if (message.what == R.id.launch_product_query) {
+		} else if (message.what == R.id.qrcode_launch_product_query) {
 			Log.d(TAG, "Got product query message");
 			String url = (String) message.obj;
 			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -104,7 +104,7 @@ public final class CaptureActivityHandler extends Handler {
 	public void quitSynchronously() {
 		state = State.DONE;
 		CameraManager.getInstance().stopPreview();
-		Message quit = Message.obtain(decodeThread.getHandler(), R.id.quit);
+		Message quit = Message.obtain(decodeThread.getHandler(), R.id.qrcode_quit);
 		quit.sendToTarget();
 		try {
 			decodeThread.join();
@@ -113,16 +113,16 @@ public final class CaptureActivityHandler extends Handler {
 		}
 
 		// Be absolutely sure we don't send any queued up messages
-		removeMessages(R.id.decode_succeeded);
-		removeMessages(R.id.decode_failed);
+		removeMessages(R.id.qrcode_decode_succeeded);
+		removeMessages(R.id.qrcode_decode_failed);
 	}
 
 	private void restartPreviewAndDecode() {
 		if (state == State.SUCCESS) {
 			state = State.PREVIEW;
 			CameraManager.getInstance().requestPreviewFrame(
-					decodeThread.getHandler(), R.id.decode);
-			CameraManager.getInstance().requestAutoFocus(this, R.id.auto_focus);
+					decodeThread.getHandler(), R.id.qrcode_decode);
+			CameraManager.getInstance().requestAutoFocus(this, R.id.qrcode_auto_focus);
 			activity.drawViewfinder();
 		}
 	}
