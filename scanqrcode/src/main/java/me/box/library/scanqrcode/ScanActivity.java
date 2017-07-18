@@ -13,9 +13,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -77,6 +80,8 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     private static final int PARSE_BARCODE_SUC = 300;
     private static final int PARSE_BARCODE_FAIL = 303;
 
+    private static final long VIBRATE_DURATION = 200L;
+
     private CaptureActivityHandler mHandler;
     private boolean hasSurface;
     private Vector<BarcodeFormat> mDecodeFormats;
@@ -92,35 +97,55 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     ViewfinderView mFinderView;
 
     SurfaceHolder surfaceHolder;
+    QrcodeConfig mQrcodeConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        QrcodeConfig config = getIntent().getParcelableExtra(Key.KEY_SCAN_CONFIG);
-        setTheme(config.getTheme());
+        mQrcodeConfig = getIntent().getParcelableExtra(Key.KEY_SCAN_CONFIG);
+        setTheme(mQrcodeConfig.getTheme());
         setContentView(R.layout.qrcode_activity_scan);
 
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
         mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
 
-        mIbLight.setVisibility(config.isHasFlashLight() ? View.VISIBLE : View.GONE);
+        mIbLight.setVisibility(mQrcodeConfig.isHasFlashLight() ? View.VISIBLE : View.GONE);
 
         CameraManager.init(getApplication());
 
         hasSurface = false;
         mInactivityTimer = new InactivityTimer(this);
 
-        String prompt = config.getPrompt();
+        String prompt = mQrcodeConfig.getPrompt();
         mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.qrcode_label_default_scan_prompt) : prompt);
         mFinderView.setRate(RATE_SCAN);
         mFinderView.setLocationRate(RATE_LOCATION);
-        mFinderView.setLineDrawable(config.getDivider());
-        mFinderView.setBorderColor(config.getBorderColor());
-        mFinderView.setTextSize(config.getTextSize());
-        mFinderView.setTextColor(config.getTextColor());
+        mFinderView.setLineDrawable(mQrcodeConfig.getDivider());
+        mFinderView.setBorderColor(mQrcodeConfig.getBorderColor());
+        mFinderView.setTextSize(mQrcodeConfig.getTextSize());
+        mFinderView.setTextColor(mQrcodeConfig.getTextColor());
 
         ClickFilter.filterForeground(mIbLight);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (mQrcodeConfig.isCanScanImage()) {
+            getMenuInflater().inflate(R.menu.qrcode_menu_scan_image, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.qrcode_menu_image) {
+            Intent intentPick = new Intent(Intent.ACTION_PICK);
+            intentPick.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(intentPick, CHOOSE_PICTURE);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -273,8 +298,6 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
             }).start();
         }
     }
-
-    private static final long VIBRATE_DURATION = 200L;
 
     private void playBeepSoundAndVibrate() {
         Media.start(this, "sound/beep.ogg");

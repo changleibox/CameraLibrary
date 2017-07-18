@@ -2,4 +2,5 @@
     <string name="qrcode_toast_scan_failure">扫描失败</string>
     <string name="qrcode_toast_please_start_pic">请开启相机权限</string>
     <string name="qrcode_label_default_scan_prompt">请对准二维码</string>
+    <string name="qrcode_choose_image">选择</string>
 </resources>

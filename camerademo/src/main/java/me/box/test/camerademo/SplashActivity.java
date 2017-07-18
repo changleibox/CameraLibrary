@@ -33,12 +33,12 @@ public class SplashActivity extends AppCompatActivity {
     public void scanQrcode(View view) {
         QrcodeConfig config = new QrcodeConfig()
                 .setTheme(R.style.AppTheme_ScanActivity)
-                .setBorderColor(Color.BLUE)
+                .setBorderColor(Color.GREEN)
                 .setCanScanImage(true)
                 .setHasFlashLight(false)
                 .setPrompt("扫描二维码，请对准")
-                .setTextSize(20)
-                .setTextColor(Color.RED);
+                .setTextSize(14)
+                .setTextColor(Color.WHITE);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
 
