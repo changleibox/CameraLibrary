@@ -223,8 +223,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     }
 
     public void handleDecode(Result result, Bitmap barcode) {
-        String resultString = result.getText();
-        onResultHandler(resultString, barcode);
+        onResultHandler(result.getText(), barcode);
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -309,13 +308,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
     }
 
-    /**
-     * 扫描二维码图片的方法
-     *
-     * @param path
-     * @return
-     */
-    @SuppressWarnings("JavaDoc")
     public Result scanningImage(String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
@@ -351,12 +343,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
     });
 
-    /**
-     * 跳转到上一个页面
-     *
-     * @param resultString
-     */
-    @SuppressWarnings("JavaDoc")
     private void onResultHandler(String resultString, Bitmap barcode) {
         onResultHandler(new QrcodeResult(resultString, barcode));
     }
