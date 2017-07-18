@@ -18,7 +18,7 @@ import android.widget.ImageView;
  *         设置view的点击效果，只限于设置的是图片
  */
 @SuppressWarnings("unused")
-public class ClickFilter {
+class ClickFilter {
 
     private static final float TRANS = -25f;
     private static final float[] BT_SELECTED = new float[]{1, 0, 0, 0, TRANS,
@@ -45,7 +45,7 @@ public class ClickFilter {
     /**
      * 设置{@link ImageView} 及子类，的前景点击效果
      */
-    public static void filterForeground(ImageView v) {
+    static void filterForeground(ImageView v) {
         v.setOnTouchListener(FOREGROUND_TOUCH_LISTENER);
     }
 

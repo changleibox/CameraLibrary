@@ -17,10 +17,9 @@ import java.util.List;
  *         <p/>
  *         2015年7月16日
  */
-@SuppressWarnings({"unused", "JavaDoc", "WeakerAccess"})
-public final class AppUtils {
+final class AppUtils {
 
-    public static boolean checkSelfPermission(@NonNull Activity context, int requestCode, @NonNull String... permissions) {
+    static boolean checkSelfPermission(@NonNull Activity context, int requestCode, @NonNull String... permissions) {
         List<String> notPermissions = new ArrayList<>();
         if (!checkSelfPermissions(context.getApplication(), notPermissions, permissions)) {
             ActivityCompat.requestPermissions(context, notPermissions.toArray(new String[notPermissions.size()]), requestCode);
@@ -33,7 +32,7 @@ public final class AppUtils {
         return checkSelfPermissions(context, null, permissions);
     }
 
-    public static boolean checkSelfPermissions(@NonNull Context context, List<String> notPermissions, @NonNull String... permissions) {
+    private static boolean checkSelfPermissions(@NonNull Context context, List<String> notPermissions, @NonNull String... permissions) {
         if (notPermissions == null) {
             notPermissions = new ArrayList<>();
         }
@@ -48,7 +47,7 @@ public final class AppUtils {
         return notPermissions.size() == 0;
     }
 
-    public static boolean hasSelfPermission(@NonNull int[] grantResults) {
+    static boolean hasSelfPermission(@NonNull int[] grantResults) {
         for (int grantResult : grantResults) {
             if (grantResult != PackageManager.PERMISSION_GRANTED) {
                 return false;

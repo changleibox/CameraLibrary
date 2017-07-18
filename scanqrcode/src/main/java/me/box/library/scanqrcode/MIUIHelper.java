@@ -10,7 +10,7 @@ import android.view.Window;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-public class MIUIHelper implements IStatusBarHelper {
+class MIUIHelper implements IStatusBarHelper {
 
     /**
      * 设置状态栏字体图标为深色，需要MIUI6以上

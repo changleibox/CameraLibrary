@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 
-public class AndroidMHelper implements IStatusBarHelper {
+class AndroidMHelper implements IStatusBarHelper {
     /**
      * @return if version is lager than M
      */

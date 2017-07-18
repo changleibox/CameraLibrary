@@ -1,5 +1,5 @@
-/**
- * Copyright © All right reserved by IZHUO.NET.
+/*
+ * Copyright © All right reserved by CHANGLEI.
  */
 package me.box.library.scanqrcode;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * 操作闪光灯的工具类
  */
 @SuppressWarnings({"deprecation", "JavaDoc", "unused"})
-public class FlashlightManager {
+class FlashlightManager {
 
     private static final String TAG = FlashlightManager.class.getSimpleName();
     private static final Object iHardwareService;
@@ -91,7 +91,7 @@ public class FlashlightManager {
      *
      * @param camera
      */
-    public static void turnLightOn(Camera camera) {
+    static void turnLightOn(Camera camera) {
         if (camera == null) {
             return;
         }
@@ -124,7 +124,7 @@ public class FlashlightManager {
      *
      * @param camera
      */
-    public static void turnLightOff(Camera camera) {
+    static void turnLightOff(Camera camera) {
         if (camera == null) {
             return;
         }

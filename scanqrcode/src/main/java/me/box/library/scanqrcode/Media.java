@@ -16,9 +16,9 @@ import android.os.Vibrator;
  *         <p>
  *         2015年1月6日
  */
-public class Media {
+class Media {
 
-    public static void start(Context context, String path) {
+    static void start(Context context, String path) {
         try {
             AssetFileDescriptor fileDescriptor = context.getAssets().openFd(path);
             @SuppressWarnings("unused")

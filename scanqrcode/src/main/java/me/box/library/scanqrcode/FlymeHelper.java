@@ -10,7 +10,7 @@ import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 
-public class FlymeHelper implements IStatusBarHelper {
+class FlymeHelper implements IStatusBarHelper {
 
     /**
      * 设置状态栏图标为深色和魅族特定的文字风格

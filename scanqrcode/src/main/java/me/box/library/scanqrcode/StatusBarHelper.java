@@ -11,8 +11,7 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
-public class StatusBarHelper {
+class StatusBarHelper {
     @IntDef({
             OTHER,
             MIUI,
@@ -20,15 +19,15 @@ public class StatusBarHelper {
             ANDROID_M
     })
     @Retention(RetentionPolicy.SOURCE)
-    public @interface SystemType {
+    @interface SystemType {
     }
 
-    public static final int OTHER = -1;
-    public static final int MIUI = 1;
-    public static final int FLYME = 2;
-    public static final int ANDROID_M = 3;
+    static final int OTHER = -1;
+    static final int MIUI = 1;
+    static final int FLYME = 2;
+    static final int ANDROID_M = 3;
 
-    public static int setStatusBarMode(Activity activity) {
+    static int setStatusBarMode(Activity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return StatusBarHelper.setStatusBarMode(activity,
                     AttrUtils.getBoolean(activity, android.R.attr.windowLightStatusBar, false));
@@ -36,7 +35,7 @@ public class StatusBarHelper {
         return 0;
     }
 
-    public static int setStatusBarMode(Activity activity, boolean isFontColorDark) {
+    private static int setStatusBarMode(Activity activity, boolean isFontColorDark) {
         @SystemType int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (new MIUIHelper().setStatusBarLightMode(activity, isFontColorDark)) {

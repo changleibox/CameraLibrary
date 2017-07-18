@@ -12,7 +12,7 @@ import android.app.Activity;
  * 状态栏工具
  */
 
-public interface IStatusBarHelper {
+interface IStatusBarHelper {
 
     boolean setStatusBarLightMode(Activity activity, boolean isFontColorDark);
 

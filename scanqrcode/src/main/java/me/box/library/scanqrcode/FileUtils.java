@@ -35,7 +35,7 @@ import java.util.Locale;
  * @since Jdk1.6 或 Jdk1.7
  */
 @SuppressWarnings({"JavaDoc", "unused"})
-public class FileUtils {
+class FileUtils {
 
     @Deprecated
     public static String getPath(Context context, Uri uri) {
@@ -70,13 +70,13 @@ public class FileUtils {
         return null;
     }
 
-    public static class GetPathFromUri4kitkat {
+    static class GetPathFromUri4kitkat {
 
         /**
          * 专为Android4.4设计的从Uri获取文件绝对路径，以前的方法已不好使
          */
         @SuppressLint("NewApi")
-        public static String getPath(final Context context, final Uri uri) {
+        static String getPath(final Context context, final Uri uri) {
 
             final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
@@ -148,8 +148,8 @@ public class FileUtils {
          * @return The value of the _data column, which is typically a file
          * path.
          */
-        public static String getDataColumn(Context context, Uri uri,
-                                           String selection, String[] selectionArgs) {
+        static String getDataColumn(Context context, Uri uri,
+                                    String selection, String[] selectionArgs) {
 
             Cursor cursor = null;
             final String column = "_data";
@@ -174,7 +174,7 @@ public class FileUtils {
          * @param uri The Uri to check.
          * @return Whether the Uri authority is ExternalStorageProvider.
          */
-        public static boolean isExternalStorageDocument(Uri uri) {
+        static boolean isExternalStorageDocument(Uri uri) {
             return "com.android.externalstorage.documents".equals(uri
                     .getAuthority());
         }
@@ -183,7 +183,7 @@ public class FileUtils {
          * @param uri The Uri to check.
          * @return Whether the Uri authority is DownloadsProvider.
          */
-        public static boolean isDownloadsDocument(Uri uri) {
+        static boolean isDownloadsDocument(Uri uri) {
             return "com.android.providers.downloads.documents".equals(uri
                     .getAuthority());
         }
@@ -192,7 +192,7 @@ public class FileUtils {
          * @param uri The Uri to check.
          * @return Whether the Uri authority is MediaProvider.
          */
-        public static boolean isMediaDocument(Uri uri) {
+        static boolean isMediaDocument(Uri uri) {
             return "com.android.providers.media.documents".equals(uri
                     .getAuthority());
         }
@@ -227,7 +227,7 @@ public class FileUtils {
         return false;
     }
 
-    public static String getUrlWithQueryString(boolean shouldEncodeUrl, String url) {
+    private static String getUrlWithQueryString(boolean shouldEncodeUrl, String url) {
         if (url == null) {
             return null;
         } else {
@@ -290,7 +290,7 @@ public class FileUtils {
      *
      * @param context
      */
-    public static boolean cleanFiles(Context context) {
+    private static boolean cleanFiles(Context context) {
         return deleteDir(context.getFilesDir());
     }
 
@@ -299,7 +299,7 @@ public class FileUtils {
      *
      * @param context
      */
-    public static boolean cleanInternalCache(Context context) {
+    private static boolean cleanInternalCache(Context context) {
         return deleteDir(context.getCacheDir());
     }
 

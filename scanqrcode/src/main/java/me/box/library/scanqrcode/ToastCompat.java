@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference;
  * <p/>
  * 显示Toast
  */
-public class ToastCompat {
+class ToastCompat {
 
     private static WeakReference<Toast> mToastWeakReference;
 

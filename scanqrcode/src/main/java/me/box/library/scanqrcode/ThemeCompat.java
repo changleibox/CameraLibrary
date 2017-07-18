@@ -14,8 +14,7 @@ import android.view.View;
  * 适配主题
  */
 
-@SuppressWarnings("WeakerAccess")
-public class ThemeCompat {
+class ThemeCompat {
 
     private static final ThemeDelegate DELEGATE;
 
@@ -23,7 +22,7 @@ public class ThemeCompat {
         DELEGATE = new NormalThemeDelegate();
     }
 
-    public static void setLayoutFullscreen(Activity activity, View... views) {
+    static void setLayoutFullscreen(Activity activity, View... views) {
         DELEGATE.setLayoutFullscreenFitSysytem(activity, views);
     }
 

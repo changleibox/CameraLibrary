@@ -12,7 +12,7 @@ import android.content.res.TypedArray;
  * <p/>
  * 获取属性值
  */
-public class AttrUtils {
+class AttrUtils {
 
     public static int getValue(Context context, int attr, int defValue) {
         int[] attrsArray = {attr};
