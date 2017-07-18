@@ -14,8 +14,11 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.google.zxing.ResultPoint;
@@ -31,7 +34,7 @@ import me.box.library.scanqrcode.R;
  * rectangle and partial transparency outside it, as well as the laser scanner
  * animation and result points.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public final class ViewfinderView extends View {
 
     @SuppressWarnings("unused")
@@ -50,7 +53,6 @@ public final class ViewfinderView extends View {
 
     private static float density;
     @SuppressWarnings("unused")
-    private static final int TEXT_SIZE = 13;
     private static final int TEXT_PADDING_TOP = 40;
     public static final int CORNER_SIZE = 15;
 
@@ -72,9 +74,10 @@ public final class ViewfinderView extends View {
     private String mText;
     private float mRate = 1F;
     private float mLocationRate = 0.5f;
-    private int blue;
+    private int borderColor;
+    private int textColor = Color.WHITE;
+    private int textSize = 14;
 
-    @SuppressWarnings("deprecation")
     public ViewfinderView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -85,7 +88,7 @@ public final class ViewfinderView extends View {
         Resources resources = getResources();
         maskColor = resources.getColor(R.color.qrcode_viewfinder_mask);
         resultColor = resources.getColor(R.color.qrcode_result_view);
-        blue = resources.getColor(R.color.qrcode_color_qrcode_border);
+        borderColor = resources.getColor(R.color.qrcode_color_qrcode_border);
 
         resultPointColor = resources.getColor(R.color.qrcode_possible_result_points);
         possibleResultPoints = new HashSet<>(5);
@@ -94,6 +97,25 @@ public final class ViewfinderView extends View {
         mRect = new Rect();
 
         mText = getResources().getString(R.string.qrcode_label_default_scan_prompt);
+    }
+
+    public void setLineDrawable(@DrawableRes int lineDrawable) {
+        Drawable drawable = getResources().getDrawable(R.drawable.qrcode_img_scan_diver);
+        if (drawable != null) {
+            this.lineDrawable = drawable;
+        }
+    }
+
+    public void setBorderColor(@ColorInt int color) {
+        borderColor = color;
+    }
+
+    public void setTextColor(@ColorInt int textColor) {
+        this.textColor = textColor;
+    }
+
+    public void setTextSize(int textSize) {
+        this.textSize = textSize;
     }
 
     public void setText(CharSequence sequence) {
@@ -152,7 +174,7 @@ public final class ViewfinderView extends View {
             paint.setAlpha(OPAQUE);
             canvas.drawBitmap(resultBitmap, frame.left, frame.top, paint);
         } else {
-            paint.setColor(blue);
+            paint.setColor(borderColor);
             canvas.drawRect(frame.left, frame.top, frame.left + ScreenRate,
                     frame.top + CORNER_WIDTH, paint);
             canvas.drawRect(frame.left, frame.top, frame.left + CORNER_WIDTH,
@@ -190,8 +212,8 @@ public final class ViewfinderView extends View {
                 }
             }
 
-            paint.setColor(Color.WHITE);
-            paint.setTextSize(getResources().getDimension(R.dimen.qrcode_sizeTextNormal));
+            paint.setColor(textColor);
+            paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, textSize, getResources().getDisplayMetrics()));
             paint.setAlpha(140);
             paint.setAntiAlias(true);
             paint.setTextAlign(Paint.Align.CENTER);

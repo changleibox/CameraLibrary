@@ -123,6 +123,8 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
             ThemeCompat.setLayoutFullscreen(this);
         }
 
+        mIbLight.setVisibility(config.isHasFlashLight() ? View.VISIBLE : View.GONE);
+
         CameraManager.init(getApplication());
 
         hasSurface = false;
@@ -132,6 +134,10 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.qrcode_label_default_scan_prompt) : prompt);
         mFinderView.setRate(RATE_SCAN);
         mFinderView.setLocationRate(RATE_LOCATION);
+        mFinderView.setLineDrawable(config.getDivider());
+        mFinderView.setBorderColor(config.getBorderColor());
+        mFinderView.setTextSize(config.getTextSize());
+        mFinderView.setTextColor(config.getTextColor());
 
         ClickFilter.filterForeground(mIbLight);
     }

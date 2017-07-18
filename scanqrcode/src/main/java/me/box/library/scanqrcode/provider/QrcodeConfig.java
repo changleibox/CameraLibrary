@@ -1,10 +1,14 @@
 package me.box.library.scanqrcode.provider;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.Px;
 import android.support.v4.media.RatingCompat;
+
+import me.box.library.scanqrcode.R;
 
 /**
  * Created by box on 2017/7/18.
@@ -15,11 +19,13 @@ import android.support.v4.media.RatingCompat;
 public class QrcodeConfig implements Parcelable {
 
     private String prompt;
-    private int borderColor;
-    private int divider;
-    private int theme;
-    private boolean hasFlashLight;
-    private boolean canScanImage;
+    private int borderColor = Color.WHITE;
+    private int divider = R.drawable.qrcode_img_scan_diver;
+    private int theme = android.support.v7.appcompat.R.style.Theme_AppCompat;
+    private int textColor = Color.WHITE;
+    private int textSize = 14;
+    private boolean hasFlashLight = true;
+    private boolean canScanImage = true;
 
     public String getPrompt() {
         return prompt;
@@ -77,6 +83,24 @@ public class QrcodeConfig implements Parcelable {
         return this;
     }
 
+    public int getTextColor() {
+        return textColor;
+    }
+
+    public QrcodeConfig setTextColor(@ColorInt int textColor) {
+        this.textColor = textColor;
+        return this;
+    }
+
+    public int getTextSize() {
+        return textSize;
+    }
+
+    public QrcodeConfig setTextSize(@Px int textSize) {
+        this.textSize = textSize;
+        return this;
+    }
+
     public QrcodeConfig() {
     }
 
@@ -91,6 +115,8 @@ public class QrcodeConfig implements Parcelable {
         dest.writeInt(this.borderColor);
         dest.writeInt(this.divider);
         dest.writeInt(this.theme);
+        dest.writeInt(this.textColor);
+        dest.writeInt(this.textSize);
         dest.writeByte(this.hasFlashLight ? (byte) 1 : (byte) 0);
         dest.writeByte(this.canScanImage ? (byte) 1 : (byte) 0);
     }
@@ -100,6 +126,8 @@ public class QrcodeConfig implements Parcelable {
         this.borderColor = in.readInt();
         this.divider = in.readInt();
         this.theme = in.readInt();
+        this.textColor = in.readInt();
+        this.textSize = in.readInt();
         this.hasFlashLight = in.readByte() != 0;
         this.canScanImage = in.readByte() != 0;
     }
