@@ -11,6 +11,7 @@ public final class Constants {
     public interface Key {
         String KEY_SCAN_RESULT = "KEY_SCAN_RESULT";
         String KEY_SCAN_CONFIG = "KEY_SCAN_CONFIG";
+        String KEY_SCAN_BITMAP = "KEY_SCAN_BITMAP";
     }
 
     interface RequestCode {

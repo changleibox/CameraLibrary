@@ -2,6 +2,7 @@ package me.box.library.scanqrcode.provider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -17,8 +18,13 @@ import me.box.library.scanqrcode.ScanQrcodeActivity;
 public final class QrcodeProvider {
 
     public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, int requestCode) {
+        scanQrcode(activity, config, null, requestCode);
+    }
+
+    public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, Bitmap bitmap, int requestCode) {
         Intent intent = new Intent(activity, ScanQrcodeActivity.class);
         intent.putExtra(Key.KEY_SCAN_CONFIG, config);
+        intent.putExtra(Key.KEY_SCAN_BITMAP, QrcodeResult.getBytes(bitmap));
         activity.startActivityForResult(intent, requestCode);
     }
 

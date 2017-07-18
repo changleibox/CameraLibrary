@@ -69,7 +69,7 @@ public class QrcodeResult implements Parcelable {
         }
     };
 
-    private static byte[] getBytes(Bitmap bitmap) {
+    static byte[] getBytes(Bitmap bitmap) {
         if (bitmap == null) {
             return null;
         }

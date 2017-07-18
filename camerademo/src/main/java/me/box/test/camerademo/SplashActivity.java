@@ -1,6 +1,7 @@
 package me.box.test.camerademo;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,8 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
  */
 
 public class SplashActivity extends AppCompatActivity {
+
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
                 .setDisplayHomeAsUpEnabled(true);
-        QrcodeProvider.scanQrcode(this, config, 0x01);
+        QrcodeProvider.scanQrcode(this, config, mBitmap, 0x01);
     }
 
     @Override
@@ -51,7 +54,9 @@ public class SplashActivity extends AppCompatActivity {
         if (scanResult != null) {
             Toast.makeText(this, scanResult.getResult(), Toast.LENGTH_SHORT).show();
             ImageView ivQrcode = (ImageView) findViewById(R.id.iv_qrcode);
-            ivQrcode.setImageBitmap(scanResult.getBarcode());
+            ivQrcode.setImageBitmap(mBitmap = scanResult.getBarcode());
+        } else {
+            Toast.makeText(this, "扫描失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

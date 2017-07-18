@@ -6,6 +6,7 @@ package me.box.library.scanqrcode;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -41,6 +42,7 @@ import com.mining.app.zxing.decoding.RGBLuminanceSource;
 import com.mining.app.zxing.view.ViewfinderView;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -73,6 +75,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     public static final float RATE_LOCATION = 0.4F;
 
     private static final long VIBRATE_DURATION = 200L;
+    private static final String UTF8 = "UTF8";
 
     private CaptureActivityHandler mHandler;
     private Vector<BarcodeFormat> mDecodeFormats;
@@ -181,6 +184,13 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
             mQrcodeConfig.setPlayBeep(false);
+        }
+
+        Intent intent = getIntent();
+        byte[] bytes = intent.getByteArrayExtra(Key.KEY_SCAN_BITMAP);
+        if (bytes != null) {
+            intent.removeExtra(Key.KEY_SCAN_BITMAP);
+            mScanImageTask = (ScanImageTask) new ScanImageTask(bytes).execute();
         }
     }
 
@@ -297,15 +307,35 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
     }
 
-    public Result scanningImage(String path) {
+    private Result scanningImage(String path) {
         if (TextUtils.isEmpty(path)) {
             return null;
         }
-        Map<DecodeHintType, String> hints = new HashMap<>();
-        hints.put(DecodeHintType.CHARACTER_SET, "UTF-8"); // 设置二维码内容的编码
+        Map<DecodeHintType, Object> hints = new HashMap<>();
+        hints.put(DecodeHintType.CHARACTER_SET, UTF8); // 设置二维码内容的编码
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
 
         try {
             RGBLuminanceSource source = new RGBLuminanceSource(path);
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            QRCodeReader reader = new QRCodeReader();
+            return reader.decode(binaryBitmap, hints);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Result scanningImage(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
+        }
+        Map<DecodeHintType, Object> hints = new HashMap<>();
+        hints.put(DecodeHintType.CHARACTER_SET, UTF8); // 设置二维码内容的编码
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
+
+        try {
+            RGBLuminanceSource source = new RGBLuminanceSource(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             QRCodeReader reader = new QRCodeReader();
             return reader.decode(binaryBitmap, hints);
@@ -348,12 +378,27 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     }
 
     private class ScanImageTask extends AsyncTask<Uri, Void, QrcodeResult> {
+
+        private byte[] bytes;
+
+        private ScanImageTask() {
+        }
+
+        private ScanImageTask(byte[] bytes) {
+            this.bytes = bytes;
+        }
+
         @Override
-        protected QrcodeResult doInBackground(Uri... strings) {
+        protected QrcodeResult doInBackground(Uri... uris) {
             if (isCancelled()) {
                 return null;
             }
-            Result result = scanningImage(GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, strings[0]));
+            Result result = null;
+            if (bytes != null) {
+                result = scanningImage(bytes);
+            } else if (uris != null && uris.length > 0) {
+                result = scanningImage(GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, uris[0]));
+            }
             return result == null ? null : new QrcodeResult(result.getText(), result.getRawBytes());
         }
 
