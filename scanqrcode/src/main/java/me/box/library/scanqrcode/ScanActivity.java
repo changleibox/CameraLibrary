@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
-import android.provider.MediaStore;
+import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -134,7 +134,12 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         if (mQrcodeConfig.isCanScanImage()) {
             getMenuInflater().inflate(R.menu.qrcode_menu_scan_image, menu);
         }
-        return super.onCreateOptionsMenu(menu);
+        boolean optionsMenu = super.onCreateOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.qrcode_menu_image);
+        if (item != null) {
+            item.setIcon(mQrcodeConfig.getScanImageIcon());
+        }
+        return optionsMenu;
     }
 
     @Override
@@ -142,7 +147,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         int i = item.getItemId();
         if (i == R.id.qrcode_menu_image) {
             Intent intentPick = new Intent(Intent.ACTION_PICK);
-            intentPick.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
+            intentPick.setDataAndType(Images.Media.INTERNAL_CONTENT_URI, "image/*");
             startActivityForResult(intentPick, CHOOSE_PICTURE);
         }
         return super.onOptionsItemSelected(item);

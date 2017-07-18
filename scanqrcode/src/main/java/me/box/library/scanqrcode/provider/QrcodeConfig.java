@@ -24,6 +24,7 @@ public class QrcodeConfig implements Parcelable {
     private int theme = android.support.v7.appcompat.R.style.Theme_AppCompat;
     private int textColor = Color.WHITE;
     private int textSize = 14;
+    private int scanImageIcon = R.drawable.qrcode_btn_scan_picture;
     private boolean hasFlashLight = true;
     private boolean canScanImage = true;
 
@@ -101,6 +102,15 @@ public class QrcodeConfig implements Parcelable {
         return this;
     }
 
+    public int getScanImageIcon() {
+        return scanImageIcon;
+    }
+
+    public QrcodeConfig setScanImageIcon(@DrawableRes int scanImageIcon) {
+        this.scanImageIcon = scanImageIcon;
+        return this;
+    }
+
     public QrcodeConfig() {
     }
 
@@ -117,6 +127,7 @@ public class QrcodeConfig implements Parcelable {
         dest.writeInt(this.theme);
         dest.writeInt(this.textColor);
         dest.writeInt(this.textSize);
+        dest.writeInt(this.scanImageIcon);
         dest.writeByte(this.hasFlashLight ? (byte) 1 : (byte) 0);
         dest.writeByte(this.canScanImage ? (byte) 1 : (byte) 0);
     }
@@ -128,6 +139,7 @@ public class QrcodeConfig implements Parcelable {
         this.theme = in.readInt();
         this.textColor = in.readInt();
         this.textSize = in.readInt();
+        this.scanImageIcon = in.readInt();
         this.hasFlashLight = in.readByte() != 0;
         this.canScanImage = in.readByte() != 0;
     }
