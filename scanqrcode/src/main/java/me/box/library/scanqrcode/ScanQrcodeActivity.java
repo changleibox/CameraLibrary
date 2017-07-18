@@ -334,7 +334,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                     onResultHandler((QrcodeResult) msg.obj);
                     break;
                 case PARSE_BARCODE_FAIL:
-                    ToastCompat.showText(ScanQrcodeActivity.this, R.string.qrcode_toast_scan_failure);
+                    onResultHandler(null);
                     break;
 
             }
