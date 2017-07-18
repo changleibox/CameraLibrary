@@ -14,9 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -105,23 +103,6 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
 
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
         mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
-
-        boolean hasTitle = AttrUtils.getBoolean(this, R.attr.windowNoTitle, false);
-        boolean hasActionBar = AttrUtils.getBoolean(this, R.attr.windowActionBar, true);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.qrcode_toolbar);
-        if (hasTitle && hasActionBar) {
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-            }
-            ThemeCompat.setLayoutFullscreen(this, toolbar);
-            toolbar.setVisibility(View.VISIBLE);
-        } else {
-            toolbar.setVisibility(View.GONE);
-            ThemeCompat.setLayoutFullscreen(this);
-        }
 
         mIbLight.setVisibility(config.isHasFlashLight() ? View.VISIBLE : View.GONE);
 

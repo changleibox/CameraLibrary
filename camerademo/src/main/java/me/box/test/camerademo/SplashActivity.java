@@ -35,8 +35,10 @@ public class SplashActivity extends AppCompatActivity {
                 .setTheme(R.style.AppTheme_ScanActivity)
                 .setBorderColor(Color.BLUE)
                 .setCanScanImage(true)
-                .setHasFlashLight(true)
-                .setPrompt("扫描二维码，请对准");
+                .setHasFlashLight(false)
+                .setPrompt("扫描二维码，请对准")
+                .setTextSize(20)
+                .setTextColor(Color.RED);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
 
