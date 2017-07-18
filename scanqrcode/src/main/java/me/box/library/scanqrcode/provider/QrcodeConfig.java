@@ -28,6 +28,8 @@ public class QrcodeConfig implements Parcelable {
     private int scanImageIcon = R.drawable.qrcode_btn_scan_picture;
     private boolean hasFlashLight = true;
     private boolean canScanImage = true;
+    private boolean isPlayBeep = true;
+    private boolean isVibrate = true;
     private boolean displayHomeAsUpEnabled;
 
     public String getTitle() {
@@ -131,6 +133,24 @@ public class QrcodeConfig implements Parcelable {
         return this;
     }
 
+    public boolean isPlayBeep() {
+        return isPlayBeep;
+    }
+
+    public QrcodeConfig setPlayBeep(boolean playBeep) {
+        isPlayBeep = playBeep;
+        return this;
+    }
+
+    public boolean isVibrate() {
+        return isVibrate;
+    }
+
+    public QrcodeConfig setVibrate(boolean vibrate) {
+        isVibrate = vibrate;
+        return this;
+    }
+
     public QrcodeConfig() {
     }
 
@@ -151,6 +171,8 @@ public class QrcodeConfig implements Parcelable {
         dest.writeInt(this.scanImageIcon);
         dest.writeByte(this.hasFlashLight ? (byte) 1 : (byte) 0);
         dest.writeByte(this.canScanImage ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isPlayBeep ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isVibrate ? (byte) 1 : (byte) 0);
         dest.writeByte(this.displayHomeAsUpEnabled ? (byte) 1 : (byte) 0);
     }
 
@@ -165,6 +187,8 @@ public class QrcodeConfig implements Parcelable {
         this.scanImageIcon = in.readInt();
         this.hasFlashLight = in.readByte() != 0;
         this.canScanImage = in.readByte() != 0;
+        this.isPlayBeep = in.readByte() != 0;
+        this.isVibrate = in.readByte() != 0;
         this.displayHomeAsUpEnabled = in.readByte() != 0;
     }
 

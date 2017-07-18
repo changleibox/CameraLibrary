@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -62,21 +61,12 @@ import me.box.library.scanqrcode.provider.QrcodeConfig;
  * <p/>
  * Box
  */
-@SuppressWarnings({"unused", "deprecation"})
-public class ScanActivity extends AppCompatActivity implements Callback, OnClickListener {
+public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener {
 
     public static final int CHOOSE_PICTURE = 0xfff;
 
-    public static final int SCAN_INDEX = 0;
-    public static final int COVER_INDEX = 1;
-    public static final int VISTA_INDEX = 2;
-    public static final int TRANSLATE_INDEX = 3;
-
     public static final float RATE_SCAN = 1F;
     public static final float RATE_LOCATION = 0.4F;
-    public static final float RATE_COVER = 0.9F;
-    public static final float RATE_VISTA = 0.9F;
-    public static final float RATE_TRANSLATE = 4F;
 
     private static final int PARSE_BARCODE_SUC = 300;
     private static final int PARSE_BARCODE_FAIL = 303;
@@ -84,14 +74,10 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     private static final long VIBRATE_DURATION = 200L;
 
     private CaptureActivityHandler mHandler;
-    private boolean hasSurface;
     private Vector<BarcodeFormat> mDecodeFormats;
     private String mCharacterSet;
     private InactivityTimer mInactivityTimer;
-    @SuppressWarnings("unused")
-    private MediaPlayer mMediaPlayer;
-    @SuppressWarnings("unused")
-    private static final float BEEP_VOLUME = 0.10f;
+    private boolean hasSurface;
     private boolean isVibrate;
     private boolean isLightEnable;
     ImageButton mIbLight;
@@ -106,7 +92,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mQrcodeConfig = getIntent().getParcelableExtra(Key.KEY_SCAN_CONFIG);
         setTheme(mQrcodeConfig.getTheme());
-        setContentView(R.layout.qrcode_activity_scan);
+        setContentView(R.layout.qrcode_activity_scan_qrcode);
 
         setTitle(mQrcodeConfig.getTitle());
         ActionBar actionBar = getSupportActionBar();
@@ -189,13 +175,11 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         mDecodeFormats = null;
         mCharacterSet = null;
 
-        boolean isPlayBeep = true;
         AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
         if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-            //noinspection UnusedAssignment
-            isPlayBeep = false;
+            mQrcodeConfig.setPlayBeep(false);
         }
-        isVibrate = true;
+        isVibrate = mQrcodeConfig.isVibrate();
     }
 
     @Override
@@ -230,7 +214,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
                     surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
                 }
             } else {
-                ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_please_start_pic);
+                ToastCompat.showText(ScanQrcodeActivity.this, R.string.qrcode_toast_please_start_pic);
                 finish();
             }
         }
@@ -250,7 +234,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         } catch (IOException ioe) {
             return;
         } catch (RuntimeException e) {
-            ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_please_start_pic);
+            ToastCompat.showText(ScanQrcodeActivity.this, R.string.qrcode_toast_please_start_pic);
             finish();
             return;
         }
@@ -314,7 +298,9 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     }
 
     private void playBeepSoundAndVibrate() {
-        Media.start(this, "sound/beep.ogg");
+        if (mQrcodeConfig.isPlayBeep()) {
+            Media.start(this, "sound/beep.ogg");
+        }
         if (isVibrate) {
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_DURATION);
@@ -355,7 +341,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
                     onResultHandler((String) msg.obj);
                     break;
                 case PARSE_BARCODE_FAIL:
-                    ToastCompat.showText(ScanActivity.this, R.string.qrcode_toast_scan_failure);
+                    ToastCompat.showText(ScanQrcodeActivity.this, R.string.qrcode_toast_scan_failure);
                     break;
 
             }
@@ -375,14 +361,9 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
             playBeepSoundAndVibrate();
         } catch (Exception ignored) {
         }
-        // if (TextUtils.isEmpty(resultString)) {
-        //     showText(R.string.toast_scan_failure);
-        // } else {
         Intent resultIntent = new Intent();
         resultIntent.putExtra(Key.KEY_SCAN_RESULT, resultString);
         setResult(RESULT_OK, resultIntent);
-        // }
-        // showText(resultString);
         finish();
     }
 

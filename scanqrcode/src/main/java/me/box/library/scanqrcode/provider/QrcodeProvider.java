@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import me.box.library.scanqrcode.Constants.Key;
-import me.box.library.scanqrcode.ScanActivity;
+import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 /**
  * Created by box on 2017/7/18.
@@ -17,7 +17,7 @@ import me.box.library.scanqrcode.ScanActivity;
 public final class QrcodeProvider {
 
     public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, int requestCode) {
-        Intent intent = new Intent(activity, ScanActivity.class);
+        Intent intent = new Intent(activity, ScanQrcodeActivity.class);
         intent.putExtra(Key.KEY_SCAN_CONFIG, config);
         activity.startActivityForResult(intent, requestCode);
     }

@@ -22,16 +22,16 @@ import com.mining.app.zxing.camera.PlanarYUVLuminanceSource;
 import java.util.Hashtable;
 
 import me.box.library.scanqrcode.R;
-import me.box.library.scanqrcode.ScanActivity;
+import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 final class DecodeHandler extends Handler {
 
 	private static final String TAG = DecodeHandler.class.getSimpleName();
 
-	private final ScanActivity activity;
+	private final ScanQrcodeActivity activity;
 	private final MultiFormatReader multiFormatReader;
 
-	DecodeHandler(ScanActivity activity, Hashtable<DecodeHintType, Object> hints) {
+	DecodeHandler(ScanQrcodeActivity activity, Hashtable<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
 		this.activity = activity;

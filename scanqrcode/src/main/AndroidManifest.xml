@@ -12,7 +12,7 @@
 
     <application>
         <activity
-            android:name=".ScanActivity"
+            android:name=".ScanQrcodeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>
 

@@ -21,7 +21,7 @@ import com.mining.app.zxing.view.ViewfinderResultPointCallback;
 import java.util.Vector;
 
 import me.box.library.scanqrcode.R;
-import me.box.library.scanqrcode.ScanActivity;
+import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 /**
  * This class handles all the messaging which comprises the state machine for
@@ -32,7 +32,7 @@ public final class CaptureActivityHandler extends Handler {
 	private static final String TAG = CaptureActivityHandler.class
 			.getSimpleName();
 
-	private final ScanActivity activity;
+	private final ScanQrcodeActivity activity;
 	private final DecodeThread decodeThread;
 	private State state;
 
@@ -40,7 +40,7 @@ public final class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public CaptureActivityHandler(ScanActivity activity,
+	public CaptureActivityHandler(ScanQrcodeActivity activity,
 			Vector<BarcodeFormat> decodeFormats, String characterSet) {
 		this.activity = activity;
 		decodeThread = new DecodeThread(activity, decodeFormats, characterSet,
