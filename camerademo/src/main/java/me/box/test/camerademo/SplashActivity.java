@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import me.box.library.scanqrcode.provider.QrcodeConfig;
@@ -49,6 +50,8 @@ public class SplashActivity extends AppCompatActivity {
         QrcodeResult scanResult = QrcodeProvider.getScanResult(data);
         if (scanResult != null) {
             Toast.makeText(this, scanResult.getResult(), Toast.LENGTH_SHORT).show();
+            ImageView ivQrcode = (ImageView) findViewById(R.id.iv_qrcode);
+            ivQrcode.setImageBitmap(scanResult.getBarcode());
         }
     }
 }

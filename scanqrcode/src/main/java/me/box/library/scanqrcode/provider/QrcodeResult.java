@@ -20,8 +20,12 @@ public class QrcodeResult implements Parcelable {
     private final byte[] barcode;
 
     public QrcodeResult(String result, Bitmap barcode) {
+        this(result, getBytes(barcode));
+    }
+
+    public QrcodeResult(String result, byte[] barcode) {
         this.result = result;
-        this.barcode = getBytes(barcode);
+        this.barcode = barcode;
     }
 
     @Nullable

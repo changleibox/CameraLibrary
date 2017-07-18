@@ -6,12 +6,12 @@ package me.box.library.scanqrcode;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
@@ -46,7 +46,6 @@ import java.util.Vector;
 
 import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.Constants.RequestCode;
-import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
@@ -71,9 +70,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     public static final float RATE_SCAN = 1F;
     public static final float RATE_LOCATION = 0.4F;
 
-    private static final int PARSE_BARCODE_SUC = 300;
-    private static final int PARSE_BARCODE_FAIL = 303;
-
     private static final long VIBRATE_DURATION = 200L;
 
     private CaptureActivityHandler mHandler;
@@ -88,6 +84,8 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
 
     SurfaceHolder surfaceHolder;
     QrcodeConfig mQrcodeConfig;
+
+    private ScanImageTask mScanImageTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,25 +274,15 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == CHOOSE_PICTURE && data != null) {
-            final String path = GetPathFromUri4kitkat.getPath(this, data.getData());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Result result = scanningImage(path);
-                    if (result != null) {
-                        Message m = mScanHandler.obtainMessage();
-                        m.what = PARSE_BARCODE_SUC;
-                        m.obj = new QrcodeResult(result.getText(), BitmapFactory.decodeFile(path));
-                        mScanHandler.sendMessage(m);
-                    } else {
-                        Message m = mScanHandler.obtainMessage();
-                        m.what = PARSE_BARCODE_FAIL;
-                        m.obj = "Scan failed!";
-                        mScanHandler.sendMessage(m);
-                    }
-                }
-            }).start();
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        if (requestCode == CHOOSE_PICTURE) {
+            if (mScanImageTask != null) {
+                mScanImageTask.cancel(true);
+                mScanImageTask = null;
+            }
+            mScanImageTask = (ScanImageTask) new ScanImageTask().execute(data.getData());
         }
     }
 
@@ -316,8 +304,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
 
         try {
             RGBLuminanceSource source = new RGBLuminanceSource(path);
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
-                    source));
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             QRCodeReader reader = new QRCodeReader();
             return reader.decode(binaryBitmap, hints);
         } catch (Exception e1) {
@@ -325,22 +312,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
         return null;
     }
-
-    private Handler mScanHandler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case PARSE_BARCODE_SUC:
-                    onResultHandler((QrcodeResult) msg.obj);
-                    break;
-                case PARSE_BARCODE_FAIL:
-                    onResultHandler(null);
-                    break;
-
-            }
-            return false;
-        }
-    });
 
     private void onResultHandler(String resultString, Bitmap barcode) {
         onResultHandler(new QrcodeResult(resultString, barcode));
@@ -372,6 +343,26 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             e.printStackTrace();
         }
         v.setSelected(isLightEnable);
+    }
+
+    private class ScanImageTask extends AsyncTask<Uri, Void, QrcodeResult> {
+        @Override
+        protected QrcodeResult doInBackground(Uri... strings) {
+            if (isCancelled()) {
+                return null;
+            }
+            final String path = FileUtils.GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, strings[0]);
+            Result result = scanningImage(path);
+            return result == null ? null : new QrcodeResult(result.getText(), result.getRawBytes());
+        }
+
+        @Override
+        protected void onPostExecute(QrcodeResult result) {
+            if (isCancelled()) {
+                return;
+            }
+            onResultHandler(result);
+        }
     }
 
 }
