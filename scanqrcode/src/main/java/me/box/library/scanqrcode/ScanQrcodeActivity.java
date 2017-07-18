@@ -303,8 +303,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             Media.start(this, "sound/beep.ogg");
         }
         if (mQrcodeConfig.isVibrate()) {
-            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-            vibrator.vibrate(VIBRATE_DURATION);
+            ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VIBRATE_DURATION);
         }
     }
 
