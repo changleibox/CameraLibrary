@@ -16,7 +16,7 @@ import me.box.library.scanqrcode.ScanActivity;
 
 public final class QrcodeProvider {
 
-    public static void scanQrcode(@NonNull Activity activity, @Nullable QrcodeConfig config, int requestCode) {
+    public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, int requestCode) {
         Intent intent = new Intent(activity, ScanActivity.class);
         intent.putExtra(Key.KEY_SCAN_CONFIG, config);
         activity.startActivityForResult(intent, requestCode);
