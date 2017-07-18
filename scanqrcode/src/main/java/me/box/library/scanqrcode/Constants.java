@@ -9,9 +9,8 @@ package me.box.library.scanqrcode;
 public final class Constants {
 
     public interface Key {
-        String KEY_SCAN_PROMPT = "KEY_SCAN_PROMPT";
         String KEY_SCAN_RESULT = "KEY_SCAN_RESULT";
-        String KEY_SCAN_THEME = "KEY_SCAN_THEME";
+        String KEY_SCAN_CONFIG = "KEY_SCAN_CONFIG";
     }
 
     interface RequestCode {

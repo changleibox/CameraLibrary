@@ -45,6 +45,7 @@ import java.util.Vector;
 import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.Constants.RequestCode;
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
+import me.box.library.scanqrcode.provider.QrcodeConfig;
 
 /**
  * @author Box
@@ -98,8 +99,8 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Intent intent = getIntent();
-        setTheme(intent.getIntExtra(Key.KEY_SCAN_THEME, R.style.Theme_AppCompat));
+        QrcodeConfig config = getIntent().getParcelableExtra(Key.KEY_SCAN_CONFIG);
+        setTheme(config.getTheme());
         setContentView(R.layout.qrcode_activity_scan);
 
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
@@ -127,7 +128,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         hasSurface = false;
         mInactivityTimer = new InactivityTimer(this);
 
-        String prompt = intent.getStringExtra(Key.KEY_SCAN_PROMPT);
+        String prompt = config.getPrompt();
         mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.qrcode_label_default_scan_prompt) : prompt);
         mFinderView.setRate(RATE_SCAN);
         mFinderView.setLocationRate(RATE_LOCATION);
