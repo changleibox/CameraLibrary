@@ -3,4 +3,11 @@
     <string name="camera_prompt_no_facing_camera">没有前置摄像头，即将打开后置摄像头</string>
     <string name="camera_prompt_insufficient_memory">内存不足，无法进行拍照</string>
     <string name="camera_prompt_no_sdcard">未监测到内存卡，请插入内存卡</string>
+    <string name="camera_app_name">傻瓜相机</string>
+    <string name="camera_btn_reversal">切换</string>
+    <string name="camera_btn_cancel">取消</string>
+    <string name="camera_btn_retake">重拍</string>
+    <string name="camera_btn_make">完成</string>
+    <string name="camera_prompt_no_camera">没有拍照设备</string>
+    <string name="camera_prompt_camera_failure">拍照失败</string>
 </resources>
