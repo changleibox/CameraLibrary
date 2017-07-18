@@ -4,8 +4,8 @@ import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Dimension;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.Px;
 import android.support.v4.media.RatingCompat;
 
 import me.box.library.scanqrcode.R;
@@ -108,7 +108,7 @@ public class QrcodeConfig implements Parcelable {
         return textSize;
     }
 
-    public QrcodeConfig setTextSize(@Px int textSize) {
+    public QrcodeConfig setTextSize(@Dimension int textSize) {
         this.textSize = textSize;
         return this;
     }
