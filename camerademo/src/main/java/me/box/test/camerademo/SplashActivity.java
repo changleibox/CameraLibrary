@@ -1,6 +1,7 @@
 package me.box.test.camerademo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
+import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
 
 /**
@@ -29,7 +31,13 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void scanQrcode(View view) {
-        QrcodeProvider.scanQrcode(this, "扫描二维码，请对准", R.style.AppTheme_ScanActivity, 0x01);
+        QrcodeConfig config = new QrcodeConfig()
+                .setTheme(R.style.AppTheme_ScanActivity)
+                .setBorderColor(Color.BLUE)
+                .setCanScanImage(true)
+                .setHasFlashLight(true)
+                .setPrompt("扫描二维码，请对准");
+        QrcodeProvider.scanQrcode(this, config, 0x01);
     }
 
     @Override

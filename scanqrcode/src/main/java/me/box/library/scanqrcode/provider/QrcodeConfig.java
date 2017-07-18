@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
+import android.support.v4.media.RatingCompat;
 
 /**
  * Created by box on 2017/7/18.
@@ -71,7 +72,7 @@ public class QrcodeConfig implements Parcelable {
         return theme;
     }
 
-    public QrcodeConfig setTheme(int theme) {
+    public QrcodeConfig setTheme(@RatingCompat.Style int theme) {
         this.theme = theme;
         return this;
     }

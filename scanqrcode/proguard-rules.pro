@@ -24,6 +24,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class me.box.library.scanqrcode.provider.QrcodeProvider {
+-keep class me.box.library.scanqrcode.provider.** {
     public *;
 }
