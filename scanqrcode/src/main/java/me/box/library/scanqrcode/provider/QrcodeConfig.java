@@ -18,6 +18,7 @@ import me.box.library.scanqrcode.R;
 
 public class QrcodeConfig implements Parcelable {
 
+    private String title;
     private String prompt;
     private int borderColor = Color.WHITE;
     private int divider = R.drawable.qrcode_img_scan_diver;
@@ -27,6 +28,15 @@ public class QrcodeConfig implements Parcelable {
     private int scanImageIcon = R.drawable.qrcode_btn_scan_picture;
     private boolean hasFlashLight = true;
     private boolean canScanImage = true;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public QrcodeConfig setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 
     public String getPrompt() {
         return prompt;
@@ -121,6 +131,7 @@ public class QrcodeConfig implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
         dest.writeString(this.prompt);
         dest.writeInt(this.borderColor);
         dest.writeInt(this.divider);
@@ -133,6 +144,7 @@ public class QrcodeConfig implements Parcelable {
     }
 
     private QrcodeConfig(Parcel in) {
+        this.title = in.readString();
         this.prompt = in.readString();
         this.borderColor = in.readInt();
         this.divider = in.readInt();

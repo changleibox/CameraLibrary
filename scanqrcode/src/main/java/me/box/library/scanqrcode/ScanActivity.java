@@ -107,6 +107,8 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         setTheme(mQrcodeConfig.getTheme());
         setContentView(R.layout.qrcode_activity_scan);
 
+        setTitle(mQrcodeConfig.getTitle());
+
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
         mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
 
