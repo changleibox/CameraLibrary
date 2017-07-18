@@ -13,8 +13,7 @@
     <application>
         <activity
             android:name=".ScanActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
     </application>
 
 </manifest>

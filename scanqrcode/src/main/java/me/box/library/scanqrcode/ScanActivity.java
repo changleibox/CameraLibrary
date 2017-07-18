@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -99,6 +98,8 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Intent intent = getIntent();
+        setTheme(intent.getIntExtra(Key.KEY_SCAN_THEME, R.style.Theme_AppCompat));
         setContentView(R.layout.qrcode_activity_scan);
 
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
@@ -117,8 +118,7 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         hasSurface = false;
         mInactivityTimer = new InactivityTimer(this);
 
-        Uri extras = getIntent().getData();
-        String prompt = extras == null ? null : extras.getQueryParameter(Key.KEY_SCAN_PROMPT);
+        String prompt = intent.getStringExtra(Key.KEY_SCAN_PROMPT);
         mFinderView.setText(TextUtils.isEmpty(prompt) ? getString(R.string.qrcode_label_default_scan_prompt) : prompt);
         mFinderView.setRate(RATE_SCAN);
         mFinderView.setLocationRate(RATE_LOCATION);

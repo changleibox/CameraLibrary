@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
-import me.box.library.scanqrcode.ScanActivity;
+import me.box.library.scanqrcode.provider.QrcodeProvider;
 
 /**
  * Created by box on 2017/7/18.
@@ -27,6 +29,15 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void scanQrcode(View view) {
-        startActivity(new Intent(this, ScanActivity.class));
+        QrcodeProvider.scanQrcode(this, "扫描二维码，请对准", R.style.Theme_AppCompat_Light_NoActionBar, 0x01);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        String scanResult = QrcodeProvider.getScanResult(data);
+        if (!TextUtils.isEmpty(scanResult)) {
+            Toast.makeText(this, scanResult, Toast.LENGTH_SHORT).show();
+        }
     }
 }

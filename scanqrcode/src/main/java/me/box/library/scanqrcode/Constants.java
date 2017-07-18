@@ -6,11 +6,12 @@ package me.box.library.scanqrcode;
  * 常量
  */
 
-final class Constants {
+public final class Constants {
 
-    interface Key {
+    public interface Key {
         String KEY_SCAN_PROMPT = "KEY_SCAN_PROMPT";
         String KEY_SCAN_RESULT = "KEY_SCAN_RESULT";
+        String KEY_SCAN_THEME = "KEY_SCAN_THEME";
     }
 
     interface RequestCode {
