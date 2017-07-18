@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void scanQrcode(View view) {
-        QrcodeProvider.scanQrcode(this, "扫描二维码，请对准", R.style.Theme_AppCompat_Light_NoActionBar, 0x01);
+        QrcodeProvider.scanQrcode(this, "扫描二维码，请对准", R.style.AppTheme, 0x01);
     }
 
     @Override

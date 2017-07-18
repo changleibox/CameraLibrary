@@ -105,13 +105,22 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
         mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
 
+        boolean hasTitle = AttrUtils.getBoolean(this, R.attr.windowNoTitle, false);
+        boolean hasActionBar = AttrUtils.getBoolean(this, R.attr.windowActionBar, true);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.qrcode_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (hasTitle && hasActionBar) {
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+            }
+            ThemeCompat.setLayoutFullscreen(this, toolbar);
+            toolbar.setVisibility(View.VISIBLE);
+        } else {
+            toolbar.setVisibility(View.GONE);
+            ThemeCompat.setLayoutFullscreen(this);
         }
-        ThemeCompat.setLayoutFullscreen(this, toolbar);
 
         CameraManager.init(getApplication());
 
