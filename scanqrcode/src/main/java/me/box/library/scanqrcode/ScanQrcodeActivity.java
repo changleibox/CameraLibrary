@@ -81,8 +81,8 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     private String mCharacterSet;
     private InactivityTimer mInactivityTimer;
     private boolean hasSurface;
-    private boolean isVibrate;
     private boolean isLightEnable;
+
     ImageButton mIbLight;
     ViewfinderView mFinderView;
 
@@ -182,7 +182,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
             mQrcodeConfig.setPlayBeep(false);
         }
-        isVibrate = mQrcodeConfig.isVibrate();
     }
 
     @Override
@@ -304,7 +303,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (mQrcodeConfig.isPlayBeep()) {
             Media.start(this, "sound/beep.ogg");
         }
-        if (isVibrate) {
+        if (mQrcodeConfig.isVibrate()) {
             Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_DURATION);
         }
