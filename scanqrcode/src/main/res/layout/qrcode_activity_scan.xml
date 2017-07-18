@@ -27,7 +27,7 @@
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="32dp"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/app_name"
+        android:contentDescription="@string/qrcode_label_default_scan_prompt"
         android:onClick="onClick"
         android:src="@drawable/qrcode_btn_scan_light"/>
 

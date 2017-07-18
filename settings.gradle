@@ -1,1 +1,1 @@
-include ':FoolCamera', ':camerademo', ':scanqrcode'
+include ':foolcamera', ':camerademo', ':scanqrcode'
