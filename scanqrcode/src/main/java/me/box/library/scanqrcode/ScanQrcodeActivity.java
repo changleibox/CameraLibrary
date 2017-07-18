@@ -335,12 +335,19 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (bytes == null || bytes.length == 0) {
             return null;
         }
+        return scanningImage(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+    }
+
+    private Result scanningImage(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
         Map<DecodeHintType, Object> hints = new HashMap<>();
         hints.put(DecodeHintType.CHARACTER_SET, UTF8); // 设置二维码内容的编码
         hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
 
         try {
-            RGBLuminanceSource source = new RGBLuminanceSource(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             QRCodeReader reader = new QRCodeReader();
             return reader.decode(binaryBitmap, hints);
@@ -404,8 +411,10 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                 qrcodeResult = result == null ? null : new QrcodeResult(result.getText(), bytes);
             } else if (uris != null && uris.length > 0) {
                 String path = GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, uris[0]);
-                Result result = scanningImage(path);
-                qrcodeResult = new QrcodeResult(result == null ? null : result.getText(), BitmapFactory.decodeFile(path));
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                qrcodeResult = new QrcodeResult(null, BitmapFactory.decodeFile(path));
+                Result result = scanningImage(qrcodeResult.getBarcode());
+                qrcodeResult = new QrcodeResult(result == null ? null : result.getText(), bitmap);
             }
             return qrcodeResult;
         }
