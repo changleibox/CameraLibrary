@@ -188,8 +188,9 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
 
         Intent intent = getIntent();
         byte[] bytes = intent.getByteArrayExtra(Key.KEY_SCAN_BITMAP);
-        if (bytes != null) {
+        if (bytes != null && bytes.length > 0) {
             intent.removeExtra(Key.KEY_SCAN_BITMAP);
+            setIntent(intent);
             mScanImageTask = (ScanImageTask) new ScanImageTask(bytes).execute();
         }
     }
@@ -207,6 +208,10 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     @Override
     protected void onDestroy() {
         mInactivityTimer.shutdown();
+        if (mScanImageTask != null) {
+            mScanImageTask.cancel(true);
+            mScanImageTask = null;
+        }
         super.onDestroy();
     }
 
@@ -393,13 +398,16 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             if (isCancelled()) {
                 return null;
             }
-            Result result = null;
+            QrcodeResult qrcodeResult = null;
             if (bytes != null) {
-                result = scanningImage(bytes);
+                Result result = scanningImage(bytes);
+                qrcodeResult = result == null ? null : new QrcodeResult(result.getText(), bytes);
             } else if (uris != null && uris.length > 0) {
-                result = scanningImage(GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, uris[0]));
+                String path = GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, uris[0]);
+                Result result = scanningImage(path);
+                qrcodeResult = new QrcodeResult(result == null ? null : result.getText(), BitmapFactory.decodeFile(path));
             }
-            return result == null ? null : new QrcodeResult(result.getText(), result.getRawBytes());
+            return qrcodeResult;
         }
 
         @Override
