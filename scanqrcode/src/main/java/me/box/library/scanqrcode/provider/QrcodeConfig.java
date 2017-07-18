@@ -28,6 +28,7 @@ public class QrcodeConfig implements Parcelable {
     private int scanImageIcon = R.drawable.qrcode_btn_scan_picture;
     private boolean hasFlashLight = true;
     private boolean canScanImage = true;
+    private boolean displayHomeAsUpEnabled;
 
     public String getTitle() {
         return title;
@@ -121,6 +122,15 @@ public class QrcodeConfig implements Parcelable {
         return this;
     }
 
+    public boolean isDisplayHomeAsUpEnabled() {
+        return displayHomeAsUpEnabled;
+    }
+
+    public QrcodeConfig setDisplayHomeAsUpEnabled(boolean displayHomeAsUpEnabled) {
+        this.displayHomeAsUpEnabled = displayHomeAsUpEnabled;
+        return this;
+    }
+
     public QrcodeConfig() {
     }
 
@@ -141,6 +151,7 @@ public class QrcodeConfig implements Parcelable {
         dest.writeInt(this.scanImageIcon);
         dest.writeByte(this.hasFlashLight ? (byte) 1 : (byte) 0);
         dest.writeByte(this.canScanImage ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.displayHomeAsUpEnabled ? (byte) 1 : (byte) 0);
     }
 
     private QrcodeConfig(Parcel in) {
@@ -154,6 +165,7 @@ public class QrcodeConfig implements Parcelable {
         this.scanImageIcon = in.readInt();
         this.hasFlashLight = in.readByte() != 0;
         this.canScanImage = in.readByte() != 0;
+        this.displayHomeAsUpEnabled = in.readByte() != 0;
     }
 
     public static final Creator<QrcodeConfig> CREATOR = new Creator<QrcodeConfig>() {

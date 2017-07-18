@@ -15,6 +15,7 @@ import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore.Images;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -108,6 +109,10 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
         setContentView(R.layout.qrcode_activity_scan);
 
         setTitle(mQrcodeConfig.getTitle());
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(mQrcodeConfig.isDisplayHomeAsUpEnabled());
+        }
 
         mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
         mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
@@ -146,11 +151,13 @@ public class ScanActivity extends AppCompatActivity implements Callback, OnClick
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int i = item.getItemId();
-        if (i == R.id.qrcode_menu_image) {
+        int id = item.getItemId();
+        if (id == R.id.qrcode_menu_image) {
             Intent intentPick = new Intent(Intent.ACTION_PICK);
             intentPick.setDataAndType(Images.Media.INTERNAL_CONTENT_URI, "image/*");
             startActivityForResult(intentPick, CHOOSE_PICTURE);
+        } else if (id == android.R.id.home) {
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

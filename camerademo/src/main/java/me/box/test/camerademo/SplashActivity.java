@@ -38,7 +38,8 @@ public class SplashActivity extends AppCompatActivity {
                 .setHasFlashLight(false)
                 .setPrompt("扫描二维码，请对准")
                 .setTextSize(14)
-                .setTextColor(Color.WHITE);
+                .setTextColor(Color.WHITE)
+                .setDisplayHomeAsUpEnabled(true);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
 
