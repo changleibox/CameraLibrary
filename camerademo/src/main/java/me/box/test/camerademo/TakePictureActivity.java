@@ -17,7 +17,7 @@ import java.io.File;
 
 import me.box.library.foolcamera.provider.CameraProvider;
 
-public class MainActivity extends AppCompatActivity {
+public class TakePictureActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_CAMERA = 0x1;
     private static final int REQUEST_CODE_PERMISSION = 0x2;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_take_picture);
 
         mIvPicture = (ImageView) findViewById(R.id.iv_picture);
     }
