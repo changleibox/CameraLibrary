@@ -6,6 +6,7 @@ package me.box.library.scanqrcode;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.Constants.RequestCode;
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
+import me.box.library.scanqrcode.provider.QrcodeResult;
 
 /**
  * @author Box
@@ -61,6 +63,7 @@ import me.box.library.scanqrcode.provider.QrcodeConfig;
  * <p/>
  * Box
  */
+@SuppressWarnings("deprecation")
 public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener {
 
     public static final int CHOOSE_PICTURE = 0xfff;
@@ -222,7 +225,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
 
     public void handleDecode(Result result, Bitmap barcode) {
         String resultString = result.getText();
-        onResultHandler(resultString);
+        onResultHandler(resultString, barcode);
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -284,7 +287,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                     if (result != null) {
                         Message m = mScanHandler.obtainMessage();
                         m.what = PARSE_BARCODE_SUC;
-                        m.obj = result.getText();
+                        m.obj = new QrcodeResult(result.getText(), BitmapFactory.decodeFile(path));
                         mScanHandler.sendMessage(m);
                     } else {
                         Message m = mScanHandler.obtainMessage();
@@ -338,7 +341,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case PARSE_BARCODE_SUC:
-                    onResultHandler((String) msg.obj);
+                    onResultHandler((QrcodeResult) msg.obj);
                     break;
                 case PARSE_BARCODE_FAIL:
                     ToastCompat.showText(ScanQrcodeActivity.this, R.string.qrcode_toast_scan_failure);
@@ -355,14 +358,18 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
      * @param resultString
      */
     @SuppressWarnings("JavaDoc")
-    private void onResultHandler(String resultString) {
+    private void onResultHandler(String resultString, Bitmap barcode) {
+        onResultHandler(new QrcodeResult(resultString, barcode));
+    }
+
+    private void onResultHandler(QrcodeResult result) {
         mInactivityTimer.onActivity();
         try {
             playBeepSoundAndVibrate();
         } catch (Exception ignored) {
         }
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(Key.KEY_SCAN_RESULT, resultString);
+        resultIntent.putExtra(Key.KEY_SCAN_RESULT, result);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

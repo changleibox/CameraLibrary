@@ -23,7 +23,7 @@ public final class QrcodeProvider {
     }
 
     @Nullable
-    public static String getScanResult(@Nullable Intent data) {
-        return data != null ? data.getStringExtra(Key.KEY_SCAN_RESULT) : null;
+    public static QrcodeResult getScanResult(@Nullable Intent data) {
+        return data != null ? (QrcodeResult) data.getParcelableExtra(Key.KEY_SCAN_RESULT) : null;
     }
 }

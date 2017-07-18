@@ -5,12 +5,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
+import me.box.library.scanqrcode.provider.QrcodeResult;
 
 /**
  * Created by box on 2017/7/18.
@@ -46,9 +46,9 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String scanResult = QrcodeProvider.getScanResult(data);
-        if (!TextUtils.isEmpty(scanResult)) {
-            Toast.makeText(this, scanResult, Toast.LENGTH_SHORT).show();
+        QrcodeResult scanResult = QrcodeProvider.getScanResult(data);
+        if (scanResult != null) {
+            Toast.makeText(this, scanResult.getResult(), Toast.LENGTH_SHORT).show();
         }
     }
 }
