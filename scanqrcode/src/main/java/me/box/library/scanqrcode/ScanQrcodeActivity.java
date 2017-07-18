@@ -41,11 +41,13 @@ import com.mining.app.zxing.decoding.RGBLuminanceSource;
 import com.mining.app.zxing.view.ViewfinderView;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.Constants.RequestCode;
+import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
@@ -299,16 +301,16 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (TextUtils.isEmpty(path)) {
             return null;
         }
-        Hashtable<DecodeHintType, String> hints = new Hashtable<>();
-        hints.put(DecodeHintType.CHARACTER_SET, "UTF8"); // 设置二维码内容的编码
+        Map<DecodeHintType, String> hints = new HashMap<>();
+        hints.put(DecodeHintType.CHARACTER_SET, "UTF-8"); // 设置二维码内容的编码
 
         try {
             RGBLuminanceSource source = new RGBLuminanceSource(path);
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
             QRCodeReader reader = new QRCodeReader();
             return reader.decode(binaryBitmap, hints);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -351,8 +353,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             if (isCancelled()) {
                 return null;
             }
-            final String path = FileUtils.GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, strings[0]);
-            Result result = scanningImage(path);
+            Result result = scanningImage(GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, strings[0]));
             return result == null ? null : new QrcodeResult(result.getText(), result.getRawBytes());
         }
 

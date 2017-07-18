@@ -27,3 +27,6 @@
 -keep class me.box.library.scanqrcode.provider.** {
     public *;
 }
+-keep class com.google.zxing.** {
+    public *;
+}
