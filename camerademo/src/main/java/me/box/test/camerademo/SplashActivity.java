@@ -35,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
                 .setTheme(R.style.AppTheme_ScanActivity)
                 .setBorderColor(Color.GREEN)
                 .setCanScanImage(true)
-                .setHasFlashLight(false)
+                .setHasFlashLight(true)
                 .setPrompt("扫描二维码，请对准")
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
