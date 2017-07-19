@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import me.box.library.scanqrcode.Constants.Key;
@@ -25,7 +24,7 @@ import static android.graphics.Color.BLACK;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class QrcodeProvider {
 
-    public static Bitmap createQrcode(String content, int size) throws WriterException {
+    public static Bitmap createQrcode(String content, int size) throws Exception {
         BitMatrix matrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, size, size);
         int width = matrix.getWidth();
         int height = matrix.getHeight();
