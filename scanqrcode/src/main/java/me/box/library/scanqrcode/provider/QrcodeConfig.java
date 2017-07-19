@@ -16,7 +16,7 @@ import me.box.library.scanqrcode.R;
  * 扫描二维码配置
  */
 
-public class QrcodeConfig implements Parcelable {
+public final class QrcodeConfig implements Parcelable {
 
     private String title;
     private String prompt;

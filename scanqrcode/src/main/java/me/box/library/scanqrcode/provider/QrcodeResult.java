@@ -16,7 +16,7 @@ import java.io.ByteArrayOutputStream;
  */
 
 @SuppressWarnings("WeakerAccess")
-public class QrcodeResult implements Parcelable {
+public final class QrcodeResult implements Parcelable {
 
     private final String result;
     private final byte[] barcode;
