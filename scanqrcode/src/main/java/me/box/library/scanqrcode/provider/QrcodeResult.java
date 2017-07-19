@@ -75,23 +75,7 @@ public class QrcodeResult implements Parcelable {
         }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return baos.toByteArray();//创建分配字节数组
-    }
-
-    private static Bitmap compressImage(Bitmap image, float kbSize) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        System.out.println("---------------------------------------->压缩到大小：" + kbSize * 1024);
-        System.out.println("---------------------------------------->原始大小：" + baos.toByteArray().length);
-        int options = 90;
-        while (options >= 0 && baos.toByteArray().length > kbSize * 1024) {
-            System.out.println("---------------------------------------->压缩后大小：" + baos.toByteArray().length);
-            baos.reset();
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos);
-            options -= 10;
-        }
-        byte[] bytes = baos.toByteArray();
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        return baos.toByteArray();
     }
 
 }

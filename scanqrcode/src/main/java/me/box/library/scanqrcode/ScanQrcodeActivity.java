@@ -4,14 +4,12 @@
 package me.box.library.scanqrcode;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -31,29 +29,17 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.mining.app.zxing.camera.CameraManager;
-import com.mining.app.zxing.camera.PlanarYUVLuminanceSource;
 import com.mining.app.zxing.decoding.CaptureActivityHandler;
-import com.mining.app.zxing.decoding.DecodeFormatManager;
 import com.mining.app.zxing.decoding.InactivityTimer;
-import com.mining.app.zxing.decoding.RGBLuminanceSource;
 import com.mining.app.zxing.view.ViewfinderView;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.Constants.RequestCode;
-import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
@@ -79,7 +65,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     public static final float RATE_LOCATION = 0.4F;
 
     private static final long VIBRATE_DURATION = 200L;
-    private static final String UTF8 = "UTF8";
 
     private CaptureActivityHandler mHandler;
     private Vector<BarcodeFormat> mDecodeFormats;
@@ -94,7 +79,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     SurfaceHolder surfaceHolder;
     QrcodeConfig mQrcodeConfig;
 
-    private ScanImageTask mScanImageTask;
+    private ScanBitmapTask mScanImageTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,7 +180,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (bytes != null && bytes.length > 0) {
             intent.removeExtra(Key.KEY_SCAN_BITMAP);
             setIntent(intent);
-            mScanImageTask = (ScanImageTask) new ScanImageTask(bytes).execute();
+            mScanImageTask = (ScanBitmapTask) new ScanBitmapTask(bytes).execute();
         }
     }
 
@@ -303,7 +288,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                 mScanImageTask.cancel(true);
                 mScanImageTask = null;
             }
-            mScanImageTask = (ScanImageTask) new ScanImageTask().execute(data.getData());
+            mScanImageTask = (ScanBitmapTask) new ScanBitmapTask(this, data.getData()).execute();
         }
     }
 
@@ -314,91 +299,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (mQrcodeConfig.isVibrate()) {
             ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VIBRATE_DURATION);
         }
-    }
-
-    private Result scanningImage(String path) {
-        if (TextUtils.isEmpty(path)) {
-            return null;
-        }
-        Map<DecodeHintType, Object> hints = new HashMap<>();
-        hints.put(DecodeHintType.CHARACTER_SET, UTF8); // 设置二维码内容的编码
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
-
-        try {
-            RGBLuminanceSource source = new RGBLuminanceSource(path);
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            QRCodeReader reader = new QRCodeReader();
-            return reader.decode(binaryBitmap, hints);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private QrcodeResult scanningImage(byte[] bytes) {
-        if (bytes == null || bytes.length == 0) {
-            return null;
-        }
-        Point point = CameraManager.getInstance().getCameraResolution();
-        if (point == null) {
-            return null;
-        }
-
-        int width = point.x;
-        int height = point.y;
-        byte[] rotatedData = new byte[bytes.length];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                rotatedData[x * height + height - y - 1] = bytes[x + y * width];
-            }
-        }
-
-        int tmp = width; // Here we are swapping, that's the difference to #11
-        //noinspection SuspiciousNameCombination
-        width = height;
-        height = tmp;
-
-        PlanarYUVLuminanceSource source = CameraManager.getInstance()
-                .buildLuminanceSource(rotatedData, width, height);
-
-        Map<DecodeHintType, Object> hints = new HashMap<>();
-
-        Vector<BarcodeFormat> decodeFormats = new Vector<>();
-        decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
-
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
-        hints.put(DecodeHintType.CHARACTER_SET, UTF8);
-
-        Result result = null;
-        try {
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            result = new MultiFormatReader().decode(binaryBitmap, hints);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result == null ? null : new QrcodeResult(result.getText(), source.renderCroppedGreyscaleBitmap());
-    }
-
-    private Result scanningImage(Bitmap bitmap) {
-        if (bitmap == null) {
-            return null;
-        }
-        Map<DecodeHintType, Object> hints = new HashMap<>();
-        hints.put(DecodeHintType.CHARACTER_SET, UTF8); // 设置二维码内容的编码
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
-
-        try {
-            RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            QRCodeReader reader = new QRCodeReader();
-            return reader.decode(binaryBitmap, hints);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private void onResultHandler(String resultString, Bitmap barcode) {
@@ -433,29 +333,14 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         v.setSelected(isLightEnable);
     }
 
-    private class ScanImageTask extends AsyncTask<Uri, Void, QrcodeResult> {
+    private class ScanBitmapTask extends ScanImageTask {
 
-        private byte[] bytes;
-
-        private ScanImageTask() {
+        ScanBitmapTask(byte[] bytes) {
+            super(bytes);
         }
 
-        private ScanImageTask(byte[] bytes) {
-            this.bytes = bytes;
-        }
-
-        @Override
-        protected QrcodeResult doInBackground(Uri... uris) {
-            if (isCancelled()) {
-                return null;
-            }
-            if (bytes != null) {
-                return scanningImage(bytes);
-            } else if (uris != null && uris.length > 0) {
-                String path = GetPathFromUri4kitkat.getPath(ScanQrcodeActivity.this, uris[0]);
-                return scanningImage(QrcodeResult.getBytes(BitmapFactory.decodeFile(path)));
-            }
-            return null;
+        ScanBitmapTask(Context context, Uri uri) {
+            super(context, uri);
         }
 
         @Override
