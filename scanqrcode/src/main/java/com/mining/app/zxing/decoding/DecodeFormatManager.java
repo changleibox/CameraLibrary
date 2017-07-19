@@ -14,14 +14,15 @@ import java.util.List;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-public final class DecodeFormatManager {
+@SuppressWarnings({"WeakerAccess", "unused"})
+final class DecodeFormatManager {
 
     private static final Pattern COMMA_PATTERN = Pattern.compile(",");
 
-    public static final Vector<BarcodeFormat> PRODUCT_FORMATS;
-    public static final Vector<BarcodeFormat> ONE_D_FORMATS;
-    public static final Vector<BarcodeFormat> QR_CODE_FORMATS;
-    public static final Vector<BarcodeFormat> DATA_MATRIX_FORMATS;
+    static final Vector<BarcodeFormat> PRODUCT_FORMATS;
+    static final Vector<BarcodeFormat> ONE_D_FORMATS;
+    static final Vector<BarcodeFormat> QR_CODE_FORMATS;
+    static final Vector<BarcodeFormat> DATA_MATRIX_FORMATS;
 
     static {
         PRODUCT_FORMATS = new Vector<>(5);
@@ -69,7 +70,7 @@ public final class DecodeFormatManager {
     private static Vector<BarcodeFormat> parseDecodeFormats(
             Iterable<String> scanFormats, String decodeMode) {
         if (scanFormats != null) {
-            Vector<BarcodeFormat> formats = new Vector<BarcodeFormat>();
+            Vector<BarcodeFormat> formats = new Vector<>();
             try {
                 for (String format : scanFormats) {
                     formats.add(BarcodeFormat.valueOf(format));

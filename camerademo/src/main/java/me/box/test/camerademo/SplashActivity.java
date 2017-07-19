@@ -84,6 +84,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
             mIvQrcode.setImageBitmap(mBitmap = result.getBarcode());
         } else {
             Toast.makeText(this, "扫描失败", Toast.LENGTH_SHORT).show();
+            mIvQrcode.setImageBitmap(mBitmap);
         }
     }
 

@@ -13,12 +13,9 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.mining.app.zxing.decoding.DecodeFormatManager;
 import com.mining.app.zxing.decoding.RGBLuminanceSource;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
@@ -110,15 +107,9 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
     private static Map<DecodeHintType, Object> getHints() {
         Map<DecodeHintType, Object> hints = new HashMap<>();
 
-        List<BarcodeFormat> decodeFormats = new ArrayList<>();
-        decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.PRODUCT_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
-
         hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.values());
         hints.put(DecodeHintType.CHARACTER_SET, UTF8);
         return hints;
     }
