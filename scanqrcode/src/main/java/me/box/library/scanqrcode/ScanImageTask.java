@@ -15,6 +15,7 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.mining.app.zxing.decoding.RGBLuminanceSource;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -109,7 +110,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
         hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.values());
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, Arrays.asList(BarcodeFormat.values()));
         hints.put(DecodeHintType.CHARACTER_SET, UTF8);
         return hints;
     }
