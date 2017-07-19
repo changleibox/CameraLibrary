@@ -3,7 +3,6 @@ package me.box.library.scanqrcode;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -14,8 +13,6 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.mining.app.zxing.camera.CameraManager;
-import com.mining.app.zxing.camera.PlanarYUVLuminanceSource;
 import com.mining.app.zxing.decoding.DecodeFormatManager;
 import com.mining.app.zxing.decoding.RGBLuminanceSource;
 
@@ -93,33 +90,33 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
             return null;
         }
 
-        if (!isYuv) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
-            return decode(source, bitmap);
-        }
-
-        Point point = CameraManager.getInstance().getCameraResolution();
-        if (point == null) {
-            return null;
-        }
-
-        int width = point.x;
-        int height = point.y;
-
-        byte[] rotatedData = new byte[data.length];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                rotatedData[x * height + height - y - 1] = data[x + y * width];
-            }
-        }
-
-        int tmp = width; // Here we are swapping, that's the difference to #11
-        width = height;
-        height = tmp;
-
-        PlanarYUVLuminanceSource source = CameraManager.getInstance().buildLuminanceSource(rotatedData, width, height);
-        return decode(source, source.renderCroppedGreyscaleBitmap());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        // if (!isYuv) {
+        RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
+        return decode(source, bitmap);
+        // }
+        //
+        // int width = bitmap.getWidth();
+        // int height = bitmap.getHeight();
+        //
+        // // byte[] rotatedData = new byte[data.length];
+        // // for (int y = 0; y < height; y++) {
+        // //     for (int x = 0; x < width; x++) {
+        // //         rotatedData[x * height + height - y - 1] = data[x + y * width];
+        // //     }
+        // // }
+        // //
+        // // int tmp = width; // Here we are swapping, that's the difference to #11
+        // // width = height;
+        // // height = tmp;
+        //
+        // PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 1, 1, width - 1, height - 1);
+        // Bitmap greyscaleBitmap = bitmap;
+        // try {
+        //     greyscaleBitmap = source.renderCroppedGreyscaleBitmap();
+        // } catch (Exception ignored) {
+        // }
+        // return decode(source, greyscaleBitmap);
     }
 
     private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
@@ -140,6 +137,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         List<BarcodeFormat> decodeFormats = new ArrayList<>();
         decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
+        decodeFormats.addAll(DecodeFormatManager.PRODUCT_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
 
         hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
