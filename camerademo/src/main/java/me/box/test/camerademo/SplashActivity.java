@@ -2,7 +2,10 @@ package me.box.test.camerademo;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import me.box.library.scanqrcode.ScanImageTask;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
 import me.box.library.scanqrcode.provider.QrcodeResult;
@@ -20,14 +24,17 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
  * 地动页面
  */
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements ScanImageTask.Callback, View.OnLongClickListener {
 
-    private Bitmap mBitmap;
+    private ImageView mIvQrcode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        mIvQrcode = (ImageView) findViewById(R.id.iv_qrcode);
+        mIvQrcode.setOnLongClickListener(this);
     }
 
     public void takePicture(View view) {
@@ -44,19 +51,51 @@ public class SplashActivity extends AppCompatActivity {
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
                 .setDisplayHomeAsUpEnabled(true);
-        QrcodeProvider.scanQrcode(this, config, mBitmap, 0x01);
+        QrcodeProvider.scanQrcode(this, config, 0x01);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        QrcodeResult scanResult = QrcodeProvider.getScanResult(data);
-        if (scanResult != null && scanResult.isSuccess()) {
-            Toast.makeText(this, scanResult.getResult(), Toast.LENGTH_SHORT).show();
-            ImageView ivQrcode = (ImageView) findViewById(R.id.iv_qrcode);
-            ivQrcode.setImageBitmap(mBitmap = scanResult.getBarcode());
+        onScanQrcodeResult(QrcodeProvider.getScanResult(data));
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        Drawable drawable = mIvQrcode.getDrawable();
+        if (drawable == null) {
+            return false;
+        }
+        ScanImageTask.scan(drawableToBitmap(drawable), this);
+        return true;
+    }
+
+    @Override
+    public void onCallback(QrcodeResult result) {
+        onScanQrcodeResult(result);
+    }
+
+    private void onScanQrcodeResult(QrcodeResult result) {
+        if (result != null && result.isSuccess()) {
+            Toast.makeText(this, result.getResult(), Toast.LENGTH_SHORT).show();
+            mIvQrcode.setImageBitmap(result.getBarcode());
         } else {
             Toast.makeText(this, "扫描失败", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                        : Bitmap.Config.RGB_565);
+
+        Canvas canvas = new Canvas(bitmap);
+        //canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
+
     }
 }

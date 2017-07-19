@@ -81,6 +81,10 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         mCallback.onCallback(result);
     }
 
+    public static ScanImageTask scan(Bitmap data, Callback callback) {
+        return scan(QrcodeResult.getBytes(data), callback);
+    }
+
     public static ScanImageTask scan(byte[] data, Callback callback) {
         return (ScanImageTask) new ScanImageTask(data).setCallback(callback).execute();
     }

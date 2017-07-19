@@ -24,8 +24,14 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class me.box.library.scanqrcode.provider.** {
+-keep class **.provider.** {
     public *;
+}
+-keep class **.ScanImageTask {
+    public *;
+}
+-keep class **.ScanImageTask$* {
+ *;
 }
 -keep class com.google.zxing.** {
     public *;
