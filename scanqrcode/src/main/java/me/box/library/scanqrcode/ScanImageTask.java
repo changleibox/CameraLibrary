@@ -28,6 +28,11 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
 public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private static final String UTF8 = "UTF8";
+    private static final MultiFormatReader READER = new MultiFormatReader();
+
+    static {
+        READER.setHints(getHints());
+    }
 
     private byte[] mData;
     private Uri mUri;
@@ -89,16 +94,13 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         }
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
-        return decode(source, bitmap);
+        return decode(new RGBLuminanceSource(bitmap), bitmap);
     }
 
     private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
         Result result = null;
         try {
-            MultiFormatReader reader = new MultiFormatReader();
-            reader.setHints(getHints());
-            result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
+            result = READER.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
         } catch (Exception e) {
             e.printStackTrace();
         }
