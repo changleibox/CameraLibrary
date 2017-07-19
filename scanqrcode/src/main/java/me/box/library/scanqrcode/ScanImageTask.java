@@ -100,13 +100,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         // bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
         data = ImageUtils.getYUV420sp(width, height, bitmap);
-        PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data,
-                width,
-                height,
-                0, 0,
-                width,
-                height,
-                false);
+        PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
         return decode(source, bitmap);
     }
 
