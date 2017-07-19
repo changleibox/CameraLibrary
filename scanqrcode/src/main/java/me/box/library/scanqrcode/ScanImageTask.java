@@ -27,6 +27,7 @@ import java.util.Map;
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
+@SuppressWarnings("SuspiciousNameCombination")
 public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private static final String UTF8 = "UTF8";
@@ -91,7 +92,6 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         }
 
         int tmp = width; // Here we are swapping, that's the difference to #11
-        //noinspection SuspiciousNameCombination
         width = height;
         height = tmp;
 
