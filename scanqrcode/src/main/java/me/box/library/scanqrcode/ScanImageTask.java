@@ -70,13 +70,13 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
     @Override
     protected abstract void onPostExecute(QrcodeResult result);
 
-    private QrcodeResult scanningImage(byte[] bytes, boolean isYuv) {
-        if (bytes == null || bytes.length == 0) {
+    private QrcodeResult scanningImage(byte[] data, boolean isYuv) {
+        if (data == null || data.length == 0) {
             return null;
         }
 
         if (!isYuv) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
             return decode(source, bitmap);
         }
@@ -89,10 +89,10 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         int width = point.x;
         int height = point.y;
 
-        byte[] rotatedData = new byte[bytes.length];
+        byte[] rotatedData = new byte[data.length];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                rotatedData[x * height + height - y - 1] = bytes[x + y * width];
+                rotatedData[x * height + height - y - 1] = data[x + y * width];
             }
         }
 
