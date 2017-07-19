@@ -2,10 +2,7 @@ package me.box.test.camerademo;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,6 +26,8 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
 
     private ImageView mIvQrcode;
     private ScanImageTask mScanTask;
+    @Nullable
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +66,10 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         if (mScanTask != null && mScanTask.getStatus() == AsyncTask.Status.RUNNING) {
             return false;
         }
-        Drawable drawable = mIvQrcode.getDrawable();
-        if (drawable == null) {
+        if (mBitmap == null) {
             return false;
         }
-        mScanTask = ScanImageTask.scan(drawableToBitmap(drawable), this);
+        mScanTask = ScanImageTask.scan(mBitmap, this);
         return true;
     }
 
@@ -83,24 +81,10 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
     private void onScanQrcodeResult(QrcodeResult result) {
         if (result != null && result.isSuccess()) {
             Toast.makeText(this, result.getResult(), Toast.LENGTH_SHORT).show();
-            mIvQrcode.setImageBitmap(result.getBarcode());
+            mIvQrcode.setImageBitmap(mBitmap = result.getBarcode());
         } else {
             Toast.makeText(this, "扫描失败", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = Bitmap.createBitmap(
-                drawable.getIntrinsicWidth(),
-                drawable.getIntrinsicHeight(),
-                drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                        : Bitmap.Config.RGB_565);
-
-        Canvas canvas = new Canvas(bitmap);
-        //canvas.setBitmap(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.draw(canvas);
-        return bitmap;
-
-    }
 }

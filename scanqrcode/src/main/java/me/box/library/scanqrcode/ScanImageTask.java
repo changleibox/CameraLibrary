@@ -53,16 +53,14 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         if (isCancelled()) {
             return null;
         }
-        boolean isYuv = false;
         if (mContext != null && mUri != null) {
-            isYuv = true;
             String path = GetPathFromUri4kitkat.getPath(mContext, mUri);
             mData = QrcodeResult.getBytes(BitmapFactory.decodeFile(path));
         }
         if (mData == null || mData.length == 0) {
             return null;
         }
-        return scanningImage(mData, isYuv);
+        return scanningImage(mData);
     }
 
     @Override
@@ -85,38 +83,14 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         return (ScanImageTask) new ScanImageTask(context, uri).setCallback(callback).execute();
     }
 
-    private QrcodeResult scanningImage(byte[] data, boolean isYuv) {
+    private QrcodeResult scanningImage(byte[] data) {
         if (data == null || data.length == 0) {
             return null;
         }
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        // if (!isYuv) {
         RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
         return decode(source, bitmap);
-        // }
-        //
-        // int width = bitmap.getWidth();
-        // int height = bitmap.getHeight();
-        //
-        // // byte[] rotatedData = new byte[data.length];
-        // // for (int y = 0; y < height; y++) {
-        // //     for (int x = 0; x < width; x++) {
-        // //         rotatedData[x * height + height - y - 1] = data[x + y * width];
-        // //     }
-        // // }
-        // //
-        // // int tmp = width; // Here we are swapping, that's the difference to #11
-        // // width = height;
-        // // height = tmp;
-        //
-        // PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 1, 1, width - 1, height - 1);
-        // Bitmap greyscaleBitmap = bitmap;
-        // try {
-        //     greyscaleBitmap = source.renderCroppedGreyscaleBitmap();
-        // } catch (Exception ignored) {
-        // }
-        // return decode(source, greyscaleBitmap);
     }
 
     private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
