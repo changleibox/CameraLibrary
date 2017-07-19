@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -42,15 +41,10 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         mIvQrcode.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                ViewTreeObserver treeObserver = mIvQrcode.getViewTreeObserver();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    treeObserver.removeOnGlobalLayoutListener(this);
-                } else {
-                    //noinspection deprecation
-                    treeObserver.removeGlobalOnLayoutListener(this);
-                }
+                //noinspection deprecation
+                mIvQrcode.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 try {
-                    mBitmap = QrcodeProvider.createQrcode("你好，哈哈哈哈哈", mIvQrcode.getWidth());
+                    mBitmap = QrcodeProvider.createQrcode("你好，哈哈哈哈哈", mIvQrcode.getWidth(), mIvQrcode.getHeight());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
