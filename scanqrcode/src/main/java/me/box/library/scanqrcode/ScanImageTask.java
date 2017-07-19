@@ -11,9 +11,9 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
-import com.mining.app.zxing.decoding.RGBLuminanceSource;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -92,7 +92,14 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         }
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        return decode(new RGBLuminanceSource(bitmap), bitmap);
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+
+        return decode(new RGBLuminanceSource(width, height, pixels), bitmap);
     }
 
     private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
