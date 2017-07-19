@@ -122,6 +122,8 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
 
+        hints.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         hints.put(DecodeHintType.CHARACTER_SET, UTF8);
         return hints;
