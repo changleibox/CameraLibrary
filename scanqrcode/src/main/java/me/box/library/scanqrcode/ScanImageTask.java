@@ -1,6 +1,7 @@
 package me.box.library.scanqrcode;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
@@ -9,12 +10,14 @@ import android.os.AsyncTask;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 import com.mining.app.zxing.camera.CameraManager;
 import com.mining.app.zxing.camera.PlanarYUVLuminanceSource;
 import com.mining.app.zxing.decoding.DecodeFormatManager;
+import com.mining.app.zxing.decoding.RGBLuminanceSource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,23 +49,32 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         if (isCancelled()) {
             return null;
         }
+        boolean isYuv = false;
         if (mContext != null && uri != null) {
+            isYuv = true;
             String path = GetPathFromUri4kitkat.getPath(mContext, uri);
             bytes = QrcodeResult.getBytes(BitmapFactory.decodeFile(path));
         }
         if (bytes == null || bytes.length == 0) {
             return null;
         }
-        return scanningImage(bytes);
+        return scanningImage(bytes, isYuv);
     }
 
     @Override
     protected abstract void onPostExecute(QrcodeResult result);
 
-    private QrcodeResult scanningImage(byte[] bytes) {
+    private QrcodeResult scanningImage(byte[] bytes, boolean isYuv) {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
+
+        if (!isYuv) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            RGBLuminanceSource source = new RGBLuminanceSource(bitmap);
+            return decode(source, bitmap);
+        }
+
         Point point = CameraManager.getInstance().getCameraResolution();
         if (point == null) {
             return null;
@@ -84,7 +96,21 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         height = tmp;
 
         PlanarYUVLuminanceSource source = CameraManager.getInstance().buildLuminanceSource(rotatedData, width, height);
+        return decode(source, source.renderCroppedGreyscaleBitmap());
+    }
 
+    private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
+        Result result = null;
+        try {
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
+            result = new MultiFormatReader().decode(binaryBitmap, getHints());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result == null ? null : new QrcodeResult(result.getText(), bitmap);
+    }
+
+    private static Map<DecodeHintType, Object> getHints() {
         Map<DecodeHintType, Object> hints = new HashMap<>();
 
         List<BarcodeFormat> decodeFormats = new ArrayList<>();
@@ -93,16 +119,7 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
 
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-
         hints.put(DecodeHintType.CHARACTER_SET, UTF8);
-
-        Result result = null;
-        try {
-            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(source));
-            result = new MultiFormatReader().decode(binaryBitmap, hints);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result == null ? null : new QrcodeResult(result.getText(), source.renderCroppedGreyscaleBitmap());
+        return hints;
     }
 }
