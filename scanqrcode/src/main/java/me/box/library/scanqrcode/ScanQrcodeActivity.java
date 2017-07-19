@@ -4,12 +4,10 @@
 package me.box.library.scanqrcode;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -57,7 +55,7 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
  * Box
  */
 @SuppressWarnings("deprecation")
-public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener {
+public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener, ScanImageTask.Callback {
 
     public static final int CHOOSE_PICTURE = 0xfff;
 
@@ -79,7 +77,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     SurfaceHolder surfaceHolder;
     QrcodeConfig mQrcodeConfig;
 
-    private ScanBitmapTask mScanImageTask;
+    private ScanImageTask mScanImageTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +178,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (bytes != null && bytes.length > 0) {
             intent.removeExtra(Key.KEY_SCAN_BITMAP);
             setIntent(intent);
-            mScanImageTask = (ScanBitmapTask) new ScanBitmapTask(bytes).execute();
+            mScanImageTask = ScanImageTask.scan(bytes, this);
         }
     }
 
@@ -278,6 +276,11 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     }
 
     @Override
+    public void onCallback(QrcodeResult result) {
+        onResultHandler(result);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK || data == null) {
@@ -288,7 +291,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                 mScanImageTask.cancel(true);
                 mScanImageTask = null;
             }
-            mScanImageTask = (ScanBitmapTask) new ScanBitmapTask(this, data.getData()).execute();
+            mScanImageTask = ScanImageTask.scan(this, data.getData(), this);
         }
     }
 
@@ -331,25 +334,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             e.printStackTrace();
         }
         v.setSelected(isLightEnable);
-    }
-
-    private class ScanBitmapTask extends ScanImageTask {
-
-        ScanBitmapTask(byte[] bytes) {
-            super(bytes);
-        }
-
-        ScanBitmapTask(Context context, Uri uri) {
-            super(context, uri);
-        }
-
-        @Override
-        protected void onPostExecute(QrcodeResult result) {
-            if (isCancelled()) {
-                return;
-            }
-            onResultHandler(result);
-        }
     }
 
 }

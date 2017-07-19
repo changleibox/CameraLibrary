@@ -28,7 +28,7 @@ import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
 @SuppressWarnings({"SuspiciousNameCombination", "WeakerAccess"})
-public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
+public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private static final String UTF8 = "UTF8";
     private static final MultiFormatReader READER = new MultiFormatReader();
@@ -37,38 +37,57 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         READER.setHints(getHints());
     }
 
-    private byte[] bytes;
-    private Uri uri;
+    private byte[] mData;
+    private Uri mUri;
     private Context mContext;
+    private Callback mCallback;
 
-    public ScanImageTask(byte[] bytes) {
-        this.bytes = bytes;
+    private ScanImageTask(byte[] data) {
+        this.mData = data;
     }
 
-    ScanImageTask(Context context, Uri uri) {
+    private ScanImageTask(Context context, Uri uri) {
         this.mContext = context;
-        this.uri = uri;
+        this.mUri = uri;
+    }
+
+    private ScanImageTask setCallback(Callback callback) {
+        this.mCallback = callback;
+        return this;
     }
 
     @Override
-    protected QrcodeResult doInBackground(Void... uris) {
+    protected QrcodeResult doInBackground(Void... voids) {
         if (isCancelled()) {
             return null;
         }
         boolean isYuv = false;
-        if (mContext != null && uri != null) {
+        if (mContext != null && mUri != null) {
             isYuv = true;
-            String path = GetPathFromUri4kitkat.getPath(mContext, uri);
-            bytes = QrcodeResult.getBytes(BitmapFactory.decodeFile(path));
+            String path = GetPathFromUri4kitkat.getPath(mContext, mUri);
+            mData = QrcodeResult.getBytes(BitmapFactory.decodeFile(path));
         }
-        if (bytes == null || bytes.length == 0) {
+        if (mData == null || mData.length == 0) {
             return null;
         }
-        return scanningImage(bytes, isYuv);
+        return scanningImage(mData, isYuv);
     }
 
     @Override
-    protected abstract void onPostExecute(QrcodeResult result);
+    protected void onPostExecute(QrcodeResult result) {
+        if (isCancelled() || mCallback == null) {
+            return;
+        }
+        mCallback.onCallback(result);
+    }
+
+    public static ScanImageTask scan(byte[] data, Callback callback) {
+        return (ScanImageTask) new ScanImageTask(data).setCallback(callback).execute();
+    }
+
+    public static ScanImageTask scan(Context context, Uri uri, Callback callback) {
+        return (ScanImageTask) new ScanImageTask(context, uri).setCallback(callback).execute();
+    }
 
     private QrcodeResult scanningImage(byte[] data, boolean isYuv) {
         if (data == null || data.length == 0) {
@@ -127,5 +146,9 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         hints.put(DecodeHintType.CHARACTER_SET, UTF8);
         return hints;
+    }
+
+    public interface Callback {
+        void onCallback(QrcodeResult result);
     }
 }

@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         QrcodeResult scanResult = QrcodeProvider.getScanResult(data);
-        if (scanResult != null) {
+        if (scanResult != null && scanResult.isSuccess()) {
             Toast.makeText(this, scanResult.getResult(), Toast.LENGTH_SHORT).show();
             ImageView ivQrcode = (ImageView) findViewById(R.id.iv_qrcode);
             ivQrcode.setImageBitmap(mBitmap = scanResult.getBarcode());
