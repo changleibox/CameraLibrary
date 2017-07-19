@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import static android.graphics.Color.WHITE;
 public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
 
     private static final String UTF_8 = "UTF-8";
-    private static final MultiFormatWriter WRITER = new MultiFormatWriter();
+    private static final QRCodeWriter WRITER = new QRCodeWriter(1, getHints());
 
     private String mContent;
     private int mWidth;
@@ -76,7 +76,7 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         if (TextUtils.isEmpty(content) || width <= 0 || height <= 0) {
             return null;
         }
-        BitMatrix matrix = WRITER.encode(content, BarcodeFormat.QR_CODE, width, height, getHints());
+        BitMatrix matrix = WRITER.encode(content, BarcodeFormat.QR_CODE, width, height);
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -95,6 +95,7 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
     private static Map<EncodeHintType, Object> getHints() {
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, UTF_8);
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         return hints;
     }
 
