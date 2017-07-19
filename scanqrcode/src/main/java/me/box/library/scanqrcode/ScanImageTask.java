@@ -22,7 +22,7 @@ import java.util.Map;
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
-@SuppressWarnings({"SuspiciousNameCombination", "WeakerAccess"})
+@SuppressWarnings({"WeakerAccess"})
 public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private static final String UTF8 = "UTF8";

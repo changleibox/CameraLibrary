@@ -6,18 +6,8 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.common.BitMatrix;
-
-import java.util.Hashtable;
-
 import me.box.library.scanqrcode.Constants.Key;
 import me.box.library.scanqrcode.ScanQrcodeActivity;
-
-import static android.graphics.Color.BLACK;
-import static android.graphics.Color.WHITE;
 
 /**
  * Created by box on 2017/7/18.
@@ -27,25 +17,6 @@ import static android.graphics.Color.WHITE;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class QrcodeProvider {
-
-    public static Bitmap createQrcode(String content, int width, int height) throws Exception {
-        Hashtable<EncodeHintType, String> hints = new Hashtable<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-        BitMatrix matrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-        int[] pixels = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (matrix.get(x, y)) {
-                    pixels[y * width + x] = BLACK;
-                } else {
-                    pixels[y * width + x] = WHITE;
-                }
-            }
-        }
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
-    }
 
     public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, int requestCode) {
         scanQrcode(activity, config, null, requestCode);

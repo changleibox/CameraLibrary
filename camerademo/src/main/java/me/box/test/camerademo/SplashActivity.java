@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import me.box.library.scanqrcode.CreateQrcodeTask;
 import me.box.library.scanqrcode.ScanImageTask;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
@@ -23,10 +24,12 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
  * 地动页面
  */
 
-public class SplashActivity extends AppCompatActivity implements ScanImageTask.Callback, View.OnLongClickListener {
+public class SplashActivity extends AppCompatActivity implements ScanImageTask.Callback,
+        CreateQrcodeTask.Callback, View.OnLongClickListener, ViewTreeObserver.OnGlobalLayoutListener {
 
     private ImageView mIvQrcode;
     private ScanImageTask mScanTask;
+    private CreateQrcodeTask mCreateTask;
     @Nullable
     private Bitmap mBitmap;
 
@@ -38,19 +41,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         mIvQrcode = (ImageView) findViewById(R.id.iv_qrcode);
         mIvQrcode.setOnLongClickListener(this);
 
-        mIvQrcode.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                //noinspection deprecation
-                mIvQrcode.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                try {
-                    mBitmap = QrcodeProvider.createQrcode("你好，哈哈哈哈哈", mIvQrcode.getWidth(), mIvQrcode.getHeight());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mIvQrcode.setImageBitmap(mBitmap);
-            }
-        });
+        mIvQrcode.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     public void takePicture(View view) {
@@ -93,6 +84,22 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         onScanQrcodeResult(result);
     }
 
+    @Override
+    public void onCallback(Bitmap bitmap) {
+        mIvQrcode.setImageBitmap(mBitmap = bitmap);
+    }
+
+    @Override
+    public void onGlobalLayout() {
+        //noinspection deprecation
+        mIvQrcode.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+        if (mCreateTask != null && mCreateTask.getStatus() == AsyncTask.Status.RUNNING) {
+            return;
+        }
+        mCreateTask = CreateQrcodeTask.create("你好，啊哈哈哈哈",
+                mIvQrcode.getWidth(), mIvQrcode.getHeight(), this);
+    }
+
     private void onScanQrcodeResult(QrcodeResult result) {
         if (result != null && result.isSuccess()) {
             Toast.makeText(this, result.getResult(), Toast.LENGTH_SHORT).show();
@@ -102,5 +109,4 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
             mIvQrcode.setImageBitmap(mBitmap);
         }
     }
-
 }

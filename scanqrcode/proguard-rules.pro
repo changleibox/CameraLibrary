@@ -33,6 +33,12 @@
 -keep class **.ScanImageTask$* {
  *;
 }
+-keep class **.CreateQrcodeTask {
+    public *;
+}
+-keep class **.CreateQrcodeTask$* {
+ *;
+}
 -keep class com.google.zxing.** {
     public *;
 }
