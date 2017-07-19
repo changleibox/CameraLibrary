@@ -2,6 +2,7 @@ package me.box.library.scanqrcode;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -72,6 +73,9 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
     }
 
     private Bitmap createQrcode(String content, int width, int height) throws Exception {
+        if (TextUtils.isEmpty(content) || width <= 0 || height <= 0) {
+            return null;
+        }
         BitMatrix matrix = WRITER.encode(content, BarcodeFormat.QR_CODE, width, height, getHints());
         int[] pixels = new int[width * height];
         for (int y = 0; y < height; y++) {
