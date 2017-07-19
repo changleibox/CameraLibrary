@@ -27,7 +27,7 @@ import java.util.Map;
 import me.box.library.scanqrcode.FileUtils.GetPathFromUri4kitkat;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
-@SuppressWarnings("SuspiciousNameCombination")
+@SuppressWarnings({"SuspiciousNameCombination", "WeakerAccess"})
 public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private static final String UTF8 = "UTF8";
@@ -45,7 +45,7 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         this.bytes = bytes;
     }
 
-    public ScanImageTask(Context context, Uri uri) {
+    ScanImageTask(Context context, Uri uri) {
         this.mContext = context;
         this.uri = uri;
     }
@@ -111,7 +111,7 @@ public abstract class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result == null ? null : new QrcodeResult(result.getText(), bitmap);
+        return result == null ? new QrcodeResult(null, (byte[]) null) : new QrcodeResult(result.getText(), bitmap);
     }
 
     private static Map<DecodeHintType, Object> getHints() {

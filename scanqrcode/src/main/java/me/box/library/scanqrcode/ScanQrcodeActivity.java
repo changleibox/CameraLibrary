@@ -312,7 +312,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         } catch (Exception ignored) {
         }
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(Key.KEY_SCAN_RESULT, result);
+        resultIntent.putExtra(Key.KEY_SCAN_RESULT, result == null ? new QrcodeResult(null, (byte[]) null) : result);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
