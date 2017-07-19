@@ -42,8 +42,7 @@ final class QRCodeWriter implements Writer {
                 }
             }
 
-            QRCode qrCode = new QRCode();
-            Encoder.encode(contents, errorCorrectionLevel, hints, qrCode);
+            QRCode qrCode = Encoder.encode(contents, errorCorrectionLevel, hints);
             return renderResult(qrCode, width, height, mMargin);
         } else {
             throw new IllegalArgumentException("Requested dimensions are too small: " + width + 'x' + height);
@@ -57,8 +56,8 @@ final class QRCodeWriter implements Writer {
         } else {
             int inputWidth = input.getWidth();
             int inputHeight = input.getHeight();
-            int qrWidth = inputWidth + margin;
-            int qrHeight = inputHeight + margin;
+            int qrWidth = inputWidth + (margin << 1);
+            int qrHeight = inputHeight + (margin << 1);
             int outputWidth = Math.max(width, qrWidth);
             int outputHeight = Math.max(height, qrHeight);
             int multiple = Math.min(outputWidth / qrWidth, outputHeight / qrHeight);
