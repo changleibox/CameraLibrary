@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
 public class SplashActivity extends AppCompatActivity implements ScanImageTask.Callback, View.OnLongClickListener {
 
     private ImageView mIvQrcode;
+    private ScanImageTask mScanTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,11 +64,14 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
 
     @Override
     public boolean onLongClick(View view) {
+        if (mScanTask != null && mScanTask.getStatus() == AsyncTask.Status.RUNNING) {
+            return false;
+        }
         Drawable drawable = mIvQrcode.getDrawable();
         if (drawable == null) {
             return false;
         }
-        ScanImageTask.scan(drawableToBitmap(drawable), this);
+        mScanTask = ScanImageTask.scan(drawableToBitmap(drawable), this);
         return true;
     }
 
