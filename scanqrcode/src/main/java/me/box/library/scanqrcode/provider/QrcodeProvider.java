@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import me.box.library.scanqrcode.Constants.Key;
+import me.box.library.scanqrcode.CreateQrcodeTask;
+import me.box.library.scanqrcode.ScanImageTask;
 import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 /**
@@ -32,5 +34,17 @@ public final class QrcodeProvider {
     @Nullable
     public static QrcodeResult getScanResult(@Nullable Intent data) {
         return data != null ? (QrcodeResult) data.getParcelableExtra(Key.KEY_SCAN_RESULT) : null;
+    }
+
+    public static ScanImageTask scan(Bitmap data, ScanImageTask.Callback callback) {
+        return ScanImageTask.scan(data, callback);
+    }
+
+    public static ScanImageTask scan(byte[] data, ScanImageTask.Callback callback) {
+        return ScanImageTask.scan(data, callback);
+    }
+
+    public static CreateQrcodeTask create(String content, int width, int height, CreateQrcodeTask.Callback callback) {
+        return CreateQrcodeTask.create(content, width, height, callback);
     }
 }

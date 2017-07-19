@@ -75,7 +75,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         if (mBitmap == null) {
             return false;
         }
-        mScanTask = ScanImageTask.scan(mBitmap, this);
+        mScanTask = QrcodeProvider.scan(mBitmap, this);
         return true;
     }
 
@@ -96,7 +96,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
         if (mCreateTask != null && mCreateTask.getStatus() == AsyncTask.Status.RUNNING) {
             return;
         }
-        mCreateTask = CreateQrcodeTask.create("你好，啊哈哈哈哈",
+        mCreateTask = QrcodeProvider.create("你好，啊哈哈哈哈",
                 mIvQrcode.getWidth(), mIvQrcode.getHeight(), this);
     }
 

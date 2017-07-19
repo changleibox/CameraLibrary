@@ -32,7 +32,7 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
 
     private Callback mCallback;
 
-    public CreateQrcodeTask(String content, int width, int height) {
+    private CreateQrcodeTask(String content, int width, int height) {
         this.mContent = content;
         this.mWidth = width;
         this.mHeight = height;
