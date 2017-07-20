@@ -195,10 +195,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     @Override
     protected void onDestroy() {
         mInactivityTimer.shutdown();
-        if (mScanImageTask != null) {
-            mScanImageTask.cancel(true);
-            mScanImageTask = null;
-        }
+        cancelScanImageTask();
         super.onDestroy();
     }
 
@@ -225,7 +222,15 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     }
 
     public void handleDecode(Result result, Bitmap barcode) {
+        cancelScanImageTask();
         onResultHandler(result.getText(), barcode);
+    }
+
+    private void cancelScanImageTask() {
+        if (mScanImageTask != null) {
+            mScanImageTask.cancel(true);
+            mScanImageTask = null;
+        }
     }
 
     private void initCamera(SurfaceHolder surfaceHolder) {
@@ -287,10 +292,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             return;
         }
         if (requestCode == CHOOSE_PICTURE) {
-            if (mScanImageTask != null) {
-                mScanImageTask.cancel(true);
-                mScanImageTask = null;
-            }
+            cancelScanImageTask();
             mScanImageTask = ScanImageTask.scan(this, data.getData(), this);
         }
     }
