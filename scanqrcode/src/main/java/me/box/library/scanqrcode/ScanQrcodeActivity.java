@@ -299,7 +299,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
 
     private void playBeepSoundAndVibrate() {
         if (mQrcodeConfig.isPlayBeep()) {
-            Media.start(this, "sound/beep.ogg");
+            Media.start(this, "sound/a0.mp3");
         }
         if (mQrcodeConfig.isVibrate()) {
             ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VIBRATE_DURATION);
