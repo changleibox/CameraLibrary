@@ -1,7 +1,14 @@
 package me.box.library.scanqrcode;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.AsyncTask;
+import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
@@ -66,6 +73,51 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         if (mCallback != null) {
             mCallback.onCallback(bitmap);
         }
+    }
+
+    public static Bitmap addLogo(Context context, Bitmap qrBitmap, @DrawableRes int drawableId, float scale, int padding) {
+        return addLogo(qrBitmap, BitmapFactory.decodeResource(context.getResources(), drawableId), scale, padding);
+    }
+
+    public static Bitmap addLogo(Bitmap qrBitmap, Bitmap logoBitmap, float scale, int padding) {
+        int qrBitmapWidth = qrBitmap.getWidth();
+        int qrBitmapHeight = qrBitmap.getHeight();
+        int logoBitmapWidth = logoBitmap.getWidth();
+        int logoBitmapHeight = logoBitmap.getHeight();
+        Bitmap blankBitmap = Bitmap.createBitmap(qrBitmapWidth, qrBitmapHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(blankBitmap);
+        canvas.drawBitmap(qrBitmap, 0, 0, null);
+        canvas.save();
+
+        canvas.scale(scale, scale, qrBitmapWidth / 2, qrBitmapHeight / 2);
+        int left = (qrBitmapWidth - logoBitmapWidth) / 2;
+        int top = (qrBitmapHeight - logoBitmapHeight) / 2;
+
+        final int strokeWidth = 1;
+        final int strokeColor = 0xff999999;
+        final int radius = 15;
+
+        Paint paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintStroke.setColor(strokeColor);
+        paintStroke.setAntiAlias(true);
+        paintStroke.setStrokeWidth(strokeWidth);
+        paintStroke.setStyle(Paint.Style.STROKE);
+
+        RectF rect = new RectF(left - padding, top - padding, left + logoBitmapWidth + padding, top + logoBitmapHeight + padding);
+        canvas.drawRoundRect(rect, radius, radius, paintStroke);
+        canvas.save();
+
+        Paint paintRect = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintRect.setColor(Color.WHITE);
+        paintRect.setAntiAlias(true);
+
+        rect = new RectF(rect.left + strokeWidth, rect.top + strokeWidth, rect.right - strokeWidth, rect.bottom - strokeWidth);
+        canvas.drawRoundRect(rect, radius, radius, paintRect);
+        canvas.save();
+
+        canvas.drawBitmap(logoBitmap, left, top, null);
+        canvas.restore();
+        return blankBitmap;
     }
 
     public static CreateQrcodeTask create(String content, int width, int height, Callback callback) {

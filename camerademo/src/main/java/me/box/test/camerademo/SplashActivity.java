@@ -18,6 +18,8 @@ import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
 import me.box.library.scanqrcode.provider.QrcodeResult;
 
+import static me.box.library.scanqrcode.CreateQrcodeTask.addLogo;
+
 /**
  * Created by box on 2017/7/18.
  * <p>
@@ -86,6 +88,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
 
     @Override
     public void onCallback(Bitmap bitmap) {
+        bitmap = addLogo(this, bitmap, R.mipmap.ic_launcher_round, 0.8f, 2);
         mIvQrcode.setImageBitmap(mBitmap = bitmap);
     }
 
