@@ -3,10 +3,12 @@ package me.box.library.scanqrcode;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
@@ -115,7 +117,14 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         canvas.drawRoundRect(rect, radius, radius, paintRect);
         canvas.save();
 
-        canvas.drawBitmap(logoBitmap, left, top, null);
+        BitmapShader bitmapShader = new BitmapShader(logoBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
+        Paint paintLogo = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintLogo.setAntiAlias(true);
+        paintLogo.setShader(bitmapShader);
+
+        rect = new RectF(left, top, left + logoBitmapWidth, top + logoBitmapHeight);
+        canvas.drawRoundRect(rect, radius, radius, paintLogo);
         canvas.restore();
         return blankBitmap;
     }

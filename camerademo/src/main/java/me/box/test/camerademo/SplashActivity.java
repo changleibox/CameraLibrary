@@ -88,7 +88,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
 
     @Override
     public void onCallback(Bitmap bitmap) {
-        bitmap = addLogo(this, bitmap, R.mipmap.ic_launcher_round, 0.8f, 2);
+        bitmap = addLogo(this, bitmap, R.drawable.ic_action_name, 1f, 2);
         mIvQrcode.setImageBitmap(mBitmap = bitmap);
     }
 
