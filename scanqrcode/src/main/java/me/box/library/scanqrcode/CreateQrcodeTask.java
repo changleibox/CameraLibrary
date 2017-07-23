@@ -3,12 +3,13 @@ package me.box.library.scanqrcode;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.support.annotation.DrawableRes;
 import android.text.TextUtils;
@@ -82,6 +83,12 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
     }
 
     public static Bitmap addLogo(Bitmap qrBitmap, Bitmap logoBitmap, float scale, int padding) {
+        final int strokeWidth = 1;
+        final int strokeColor = 0xff999999;
+        final int radius = 15;
+
+        logoBitmap = transformRadius(logoBitmap, radius);
+
         int qrBitmapWidth = qrBitmap.getWidth();
         int qrBitmapHeight = qrBitmap.getHeight();
         int logoBitmapWidth = logoBitmap.getWidth();
@@ -94,10 +101,6 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         canvas.scale(scale, scale, qrBitmapWidth / 2, qrBitmapHeight / 2);
         int left = (qrBitmapWidth - logoBitmapWidth) / 2;
         int top = (qrBitmapHeight - logoBitmapHeight) / 2;
-
-        final int strokeWidth = 1;
-        final int strokeColor = 0xff999999;
-        final int radius = 15;
 
         Paint paintStroke = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintStroke.setColor(strokeColor);
@@ -117,15 +120,7 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         canvas.drawRoundRect(rect, radius, radius, paintRect);
         canvas.save();
 
-        BitmapShader bitmapShader = new BitmapShader(logoBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-
-        Paint paintLogo = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintLogo.setAntiAlias(true);
-        paintLogo.setShader(bitmapShader);
-
-        rect = new RectF(left, top, left + logoBitmapWidth, top + logoBitmapHeight);
-        canvas.drawRoundRect(rect, radius, radius, paintLogo);
-        canvas.restore();
+        canvas.drawBitmap(logoBitmap, left, top, null);
         return blankBitmap;
     }
 
@@ -133,7 +128,7 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         return (CreateQrcodeTask) new CreateQrcodeTask(content, width, height).setCallback(callback).execute();
     }
 
-    private Bitmap createQrcode(String content, int width, int height) throws Exception {
+    private static Bitmap createQrcode(String content, int width, int height) throws Exception {
         if (TextUtils.isEmpty(content) || width <= 0 || height <= 0) {
             return null;
         }
@@ -151,6 +146,30 @@ public final class CreateQrcodeTask extends AsyncTask<Void, Void, Bitmap> {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
+    }
+
+    private static Bitmap transformRadius(Bitmap source, int size) {
+        int width = source.getWidth();
+        int height = source.getHeight();
+
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+        Paint paintColor = new Paint();
+        paintColor.setColor(Color.WHITE);
+        paintColor.setFlags(Paint.ANTI_ALIAS_FLAG);
+        paintColor.setAntiAlias(true);
+
+        RectF rectF = new RectF(new Rect(0, 0, width, height));
+
+        canvas.drawRoundRect(rectF, size, size, paintColor);
+
+        Paint paintImage = new Paint();
+        paintImage.setAntiAlias(true);
+        paintImage.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
+        canvas.drawBitmap(source, 0, 0, paintImage);
+        source.recycle();
+        return output;
     }
 
     private static Map<EncodeHintType, Object> getHints() {
