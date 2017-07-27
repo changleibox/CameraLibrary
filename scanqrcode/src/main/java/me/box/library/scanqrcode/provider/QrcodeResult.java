@@ -19,17 +19,26 @@ import java.io.ByteArrayOutputStream;
 public final class QrcodeResult implements Parcelable {
 
     private final String result;
-    private final byte[] barcode;
     private final boolean isSuccess;
+    private final byte[] rawBarcode;
+
+    private byte[] barcode;
+    private boolean needResultBitmap;
 
     public QrcodeResult(String result, Bitmap barcode) {
         this(result, getBytes(barcode));
     }
 
     public QrcodeResult(String result, byte[] barcode) {
+        this.needResultBitmap = true;
         this.result = result;
-        this.barcode = barcode;
+        this.rawBarcode = this.barcode = barcode;
         this.isSuccess = !TextUtils.isEmpty(result) && barcode != null && barcode.length > 0;
+    }
+
+    public void setNeedResultBitmap(boolean resultBitmap) {
+        this.needResultBitmap = resultBitmap;
+        this.barcode = resultBitmap ? rawBarcode : null;
     }
 
     @Nullable
@@ -46,7 +55,16 @@ public final class QrcodeResult implements Parcelable {
     }
 
     public boolean isSuccess() {
-        return isSuccess;
+        return (needResultBitmap && isSuccess) || (!needResultBitmap && !TextUtils.isEmpty(result));
+    }
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        if (bitmap == null) {
+            return null;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
     }
 
     @Override
@@ -57,14 +75,18 @@ public final class QrcodeResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.result);
-        dest.writeByteArray(this.barcode);
         dest.writeByte(this.isSuccess ? (byte) 1 : (byte) 0);
+        dest.writeByteArray(this.rawBarcode);
+        dest.writeByteArray(this.barcode);
+        dest.writeByte(this.needResultBitmap ? (byte) 1 : (byte) 0);
     }
 
-    private QrcodeResult(Parcel in) {
+    protected QrcodeResult(Parcel in) {
         this.result = in.readString();
-        this.barcode = in.createByteArray();
         this.isSuccess = in.readByte() != 0;
+        this.rawBarcode = in.createByteArray();
+        this.barcode = in.createByteArray();
+        this.needResultBitmap = in.readByte() != 0;
     }
 
     public static final Creator<QrcodeResult> CREATOR = new Creator<QrcodeResult>() {
@@ -78,13 +100,4 @@ public final class QrcodeResult implements Parcelable {
             return new QrcodeResult[size];
         }
     };
-
-    public static byte[] getBytes(Bitmap bitmap) {
-        if (bitmap == null) {
-            return null;
-        }
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
 }

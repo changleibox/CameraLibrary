@@ -31,6 +31,7 @@ public final class QrcodeConfig implements Parcelable {
     private boolean canScanImage = true;
     private boolean isPlayBeep = true;
     private boolean isVibrate = true;
+    private boolean needResultBitmap = true;
     private boolean displayHomeAsUpEnabled;
 
     transient private Class<? extends ScanQrcodeActivity> subClass;
@@ -127,6 +128,15 @@ public final class QrcodeConfig implements Parcelable {
         return this;
     }
 
+    public boolean isNeedResultBitmap() {
+        return needResultBitmap;
+    }
+
+    public QrcodeConfig setNeedResultBitmap(boolean needResultBitmap) {
+        this.needResultBitmap = needResultBitmap;
+        return this;
+    }
+
     public boolean isDisplayHomeAsUpEnabled() {
         return displayHomeAsUpEnabled;
     }
@@ -185,6 +195,7 @@ public final class QrcodeConfig implements Parcelable {
         dest.writeByte(this.canScanImage ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isPlayBeep ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isVibrate ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.needResultBitmap ? (byte) 1 : (byte) 0);
         dest.writeByte(this.displayHomeAsUpEnabled ? (byte) 1 : (byte) 0);
     }
 
@@ -201,6 +212,7 @@ public final class QrcodeConfig implements Parcelable {
         this.canScanImage = in.readByte() != 0;
         this.isPlayBeep = in.readByte() != 0;
         this.isVibrate = in.readByte() != 0;
+        this.needResultBitmap = in.readByte() != 0;
         this.displayHomeAsUpEnabled = in.readByte() != 0;
     }
 

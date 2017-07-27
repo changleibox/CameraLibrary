@@ -320,8 +320,10 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             playBeepSoundAndVibrate();
         } catch (Exception ignored) {
         }
+        QrcodeResult qrcodeResult = result == null ? new QrcodeResult(null, (byte[]) null) : result;
+        qrcodeResult.setNeedResultBitmap(mQrcodeConfig.isNeedResultBitmap());
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(Key.KEY_SCAN_RESULT, result == null ? new QrcodeResult(null, (byte[]) null) : result);
+        resultIntent.putExtra(Key.KEY_SCAN_RESULT, qrcodeResult);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
