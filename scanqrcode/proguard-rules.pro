@@ -39,6 +39,10 @@
 -keep class **.CreateQrcodeTask$* {
     *;
 }
+-keep class **.ScanQrcodeActivity {
+    public *;
+    protected *;
+}
 -keep class com.google.zxing.** {
     *;
 }
