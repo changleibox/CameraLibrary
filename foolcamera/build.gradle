@@ -99,7 +99,7 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'library for QRCode' //项目描述
+                name 'library for Camera' //项目描述
                 url siteUrl
                 // Set your license
                 licenses {
