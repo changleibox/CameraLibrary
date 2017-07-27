@@ -120,12 +120,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         if (mQrcodeConfig.isCanScanImage()) {
             getMenuInflater().inflate(R.menu.qrcode_menu_scan_image, menu);
         }
-        boolean optionsMenu = super.onCreateOptionsMenu(menu);
-        MenuItem item = menu.findItem(R.id.qrcode_menu_image);
-        if (item != null) {
-            item.setIcon(mQrcodeConfig.getScanImageIcon());
-        }
-        return optionsMenu;
+        return createOptionsMenu(menu);
     }
 
     @Override
@@ -224,6 +219,15 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
     public void handleDecode(Result result, Bitmap barcode) {
         cancelScanImageTask();
         onResultHandler(result.getText(), barcode);
+    }
+
+    protected boolean createOptionsMenu(Menu menu) {
+        boolean optionsMenu = super.onCreateOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.qrcode_menu_image);
+        if (item != null) {
+            item.setIcon(mQrcodeConfig.getScanImageIcon());
+        }
+        return optionsMenu;
     }
 
     private void cancelScanImageTask() {
