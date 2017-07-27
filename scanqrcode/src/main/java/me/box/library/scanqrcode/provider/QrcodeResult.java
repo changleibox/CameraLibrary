@@ -19,8 +19,8 @@ import java.io.ByteArrayOutputStream;
 public final class QrcodeResult implements Parcelable {
 
     private final String result;
-    private final boolean isSuccess;
-    private final byte[] rawBarcode;
+
+    transient private byte[] rawBarcode;
 
     private byte[] barcode;
     private boolean needResultBitmap;
@@ -33,7 +33,6 @@ public final class QrcodeResult implements Parcelable {
         this.needResultBitmap = true;
         this.result = result;
         this.rawBarcode = this.barcode = barcode;
-        this.isSuccess = !TextUtils.isEmpty(result) && barcode != null && barcode.length > 0;
     }
 
     public void setNeedResultBitmap(boolean resultBitmap) {
@@ -55,7 +54,7 @@ public final class QrcodeResult implements Parcelable {
     }
 
     public boolean isSuccess() {
-        return (needResultBitmap && isSuccess) || (!needResultBitmap && !TextUtils.isEmpty(result));
+        return !TextUtils.isEmpty(result) && (!needResultBitmap || barcode != null);
     }
 
     public static byte[] getBytes(Bitmap bitmap) {
@@ -75,16 +74,12 @@ public final class QrcodeResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.result);
-        dest.writeByte(this.isSuccess ? (byte) 1 : (byte) 0);
-        dest.writeByteArray(this.rawBarcode);
         dest.writeByteArray(this.barcode);
         dest.writeByte(this.needResultBitmap ? (byte) 1 : (byte) 0);
     }
 
     protected QrcodeResult(Parcel in) {
         this.result = in.readString();
-        this.isSuccess = in.readByte() != 0;
-        this.rawBarcode = in.createByteArray();
         this.barcode = in.createByteArray();
         this.needResultBitmap = in.readByte() != 0;
     }
