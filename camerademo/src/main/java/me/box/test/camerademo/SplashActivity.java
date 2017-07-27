@@ -61,6 +61,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
                 .setSubClass(ScanQrcodeActivity.class)
+                .setNeedResultBitmap(false)
                 .setDisplayHomeAsUpEnabled(true);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
