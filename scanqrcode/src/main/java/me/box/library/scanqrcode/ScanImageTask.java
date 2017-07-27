@@ -11,7 +11,7 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
@@ -96,9 +96,11 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
-        data = ImageUtils.getYUV420sp(width, height, bitmap);
-        PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
-        return decode(source, bitmap);
+        // data = ImageUtils.getYUV420sp(width, height, bitmap);
+        // PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
+        int[] pixels = new int[width * height];
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
+        return decode(new RGBLuminanceSource(width, height, pixels), bitmap);
     }
 
     private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
