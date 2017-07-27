@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
                 .setSubClass(ScanQrcodeActivity.class)
-                .setNeedResultBitmap(false)
+                .setNeedResultBitmap(true)
                 .setDisplayHomeAsUpEnabled(true);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
@@ -107,7 +107,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
     }
 
     private void onScanQrcodeResult(QrcodeResult result) {
-        if (result != null && result.isSuccess()) {
+        if (result != null) {
             Toast.makeText(this, result.getResult(), Toast.LENGTH_SHORT).show();
             mIvQrcode.setImageBitmap(mBitmap = result.getBarcode());
         } else {

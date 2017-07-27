@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 public final class QrcodeResult implements Parcelable {
 
     private final String result;
+    private final String barcodePath;
 
     transient private byte[] rawBarcode;
 
@@ -33,6 +34,13 @@ public final class QrcodeResult implements Parcelable {
         this.needResultBitmap = true;
         this.result = result;
         this.rawBarcode = this.barcode = barcode;
+        this.barcodePath = null;
+    }
+
+    public QrcodeResult(String result, String barcodePath) {
+        this.needResultBitmap = true;
+        this.result = result;
+        this.barcodePath = barcodePath;
     }
 
     public void setNeedResultBitmap(boolean resultBitmap) {
@@ -47,14 +55,17 @@ public final class QrcodeResult implements Parcelable {
 
     @Nullable
     public Bitmap getBarcode() {
-        if (barcode == null) {
+        if (!needResultBitmap || (barcode == null && TextUtils.isEmpty(barcodePath))) {
             return null;
+        }
+        if (!TextUtils.isEmpty(barcodePath)) {
+            return BitmapFactory.decodeFile(barcodePath);
         }
         return BitmapFactory.decodeByteArray(barcode, 0, barcode.length);
     }
 
     public boolean isSuccess() {
-        return !TextUtils.isEmpty(result) && (!needResultBitmap || barcode != null);
+        return !TextUtils.isEmpty(result) && (!needResultBitmap || barcode != null || !TextUtils.isEmpty(barcodePath));
     }
 
     public static byte[] getBytes(Bitmap bitmap) {
@@ -74,12 +85,14 @@ public final class QrcodeResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.result);
+        dest.writeString(this.barcodePath);
         dest.writeByteArray(this.barcode);
         dest.writeByte(this.needResultBitmap ? (byte) 1 : (byte) 0);
     }
 
     protected QrcodeResult(Parcel in) {
         this.result = in.readString();
+        this.barcodePath = in.readString();
         this.barcode = in.createByteArray();
         this.needResultBitmap = in.readByte() != 0;
     }

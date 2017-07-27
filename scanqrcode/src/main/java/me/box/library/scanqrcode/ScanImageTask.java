@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -34,6 +35,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
 
     private byte[] mData;
     private Uri mUri;
+    private String mQrcodePath;
     private Context mContext;
     private Callback mCallback;
 
@@ -57,8 +59,8 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
             return null;
         }
         if (mContext != null && mUri != null) {
-            String path = GetPathFromUri4kitkat.getPath(mContext, mUri);
-            mData = QrcodeResult.getBytes(BitmapFactory.decodeFile(path));
+            mQrcodePath = GetPathFromUri4kitkat.getPath(mContext, mUri);
+            mData = QrcodeResult.getBytes(BitmapFactory.decodeFile(mQrcodePath));
         }
         if (mData == null || mData.length == 0) {
             return null;
@@ -96,21 +98,30 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
-        // data = ImageUtils.getYUV420sp(width, height, bitmap);
-        // PlanarYUVLuminanceSource source = new PlanarYUVLuminanceSource(data, width, height, 0, 0, width, height, false);
         int[] pixels = new int[width * height];
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
-        return decode(new RGBLuminanceSource(width, height, pixels), bitmap);
+        LuminanceSource source = new RGBLuminanceSource(width, height, pixels);
+        return TextUtils.isEmpty(mQrcodePath) ? decode(source, bitmap) : decode(source, mQrcodePath);
     }
 
-    private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
+    private static Result decode(LuminanceSource source) {
         Result result = null;
         try {
             result = READER.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return result == null ? new QrcodeResult(null, (byte[]) null) : new QrcodeResult(result.getText(), bitmap);
+        return result;
+    }
+
+    private static QrcodeResult decode(LuminanceSource source, Bitmap bitmap) {
+        Result result = decode(source);
+        return new QrcodeResult(result == null ? null : result.getText(), bitmap);
+    }
+
+    private static QrcodeResult decode(LuminanceSource source, String path) {
+        Result result = decode(source);
+        return new QrcodeResult(result == null ? null : result.getText(), path);
     }
 
     private static Map<DecodeHintType, Object> getHints() {

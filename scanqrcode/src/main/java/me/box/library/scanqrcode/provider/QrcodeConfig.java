@@ -176,6 +176,10 @@ public final class QrcodeConfig implements Parcelable {
     public QrcodeConfig() {
     }
 
+    public QrcodeConfig(Class<? extends ScanQrcodeActivity> subClass) {
+        this.subClass = subClass;
+    }
+
     @Override
     public int describeContents() {
         return 0;
