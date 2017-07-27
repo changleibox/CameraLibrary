@@ -33,7 +33,7 @@ public final class QrcodeConfig implements Parcelable {
     private boolean isVibrate = true;
     private boolean displayHomeAsUpEnabled;
 
-    transient private Class<? super ScanQrcodeActivity> subClass;
+    transient private Class<? extends ScanQrcodeActivity> subClass;
 
     public String getTitle() {
         return title;
@@ -154,11 +154,11 @@ public final class QrcodeConfig implements Parcelable {
         return this;
     }
 
-    Class<? super ScanQrcodeActivity> getSubClass() {
+    Class<? extends ScanQrcodeActivity> getSubClass() {
         return subClass;
     }
 
-    public QrcodeConfig setSubClass(Class<? super ScanQrcodeActivity> subClass) {
+    public QrcodeConfig setSubClass(Class<? extends ScanQrcodeActivity> subClass) {
         this.subClass = subClass;
         return this;
     }
