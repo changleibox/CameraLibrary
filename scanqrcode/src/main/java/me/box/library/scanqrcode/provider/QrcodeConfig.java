@@ -9,6 +9,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.media.RatingCompat;
 
 import me.box.library.scanqrcode.R;
+import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 /**
  * Created by box on 2017/7/18.
@@ -31,6 +32,8 @@ public final class QrcodeConfig implements Parcelable {
     private boolean isPlayBeep = true;
     private boolean isVibrate = true;
     private boolean displayHomeAsUpEnabled;
+
+    transient private Class<? super ScanQrcodeActivity> subClass;
 
     public String getTitle() {
         return title;
@@ -148,6 +151,15 @@ public final class QrcodeConfig implements Parcelable {
 
     public QrcodeConfig setVibrate(boolean vibrate) {
         isVibrate = vibrate;
+        return this;
+    }
+
+    Class<? super ScanQrcodeActivity> getSubClass() {
+        return subClass;
+    }
+
+    public QrcodeConfig setSubClass(Class<? super ScanQrcodeActivity> subClass) {
+        this.subClass = subClass;
         return this;
     }
 

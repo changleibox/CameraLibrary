@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import me.box.library.scanqrcode.CreateQrcodeTask;
 import me.box.library.scanqrcode.ScanImageTask;
+import me.box.library.scanqrcode.ScanQrcodeActivity;
 import me.box.library.scanqrcode.provider.QrcodeConfig;
 import me.box.library.scanqrcode.provider.QrcodeProvider;
 import me.box.library.scanqrcode.provider.QrcodeResult;
@@ -59,6 +60,7 @@ public class SplashActivity extends AppCompatActivity implements ScanImageTask.C
                 .setPrompt("扫描二维码，请对准")
                 .setTextSize(14)
                 .setTextColor(Color.WHITE)
+                .setSubClass(ScanQrcodeActivity.class)
                 .setDisplayHomeAsUpEnabled(true);
         QrcodeProvider.scanQrcode(this, config, 0x01);
     }
