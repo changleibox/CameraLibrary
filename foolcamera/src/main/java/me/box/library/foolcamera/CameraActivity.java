@@ -66,6 +66,11 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         mCameraFacing = CameraCompat.getExtrasCameraFacing(this);
         int cameraId = CameraCompat.getCameraId(mCameraFacing);
         mCamera = CameraCompat.openCamera(cameraId);
+        if (mCamera == null) {
+            CameraToastCompat.showText(this, R.string.camera_prompt_camera_failure);
+            finish();
+            return;
+        }
         mCameraPreview = new CameraPreview(this, mCamera, cameraId);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mCameraPreview.setLayoutParams(params);

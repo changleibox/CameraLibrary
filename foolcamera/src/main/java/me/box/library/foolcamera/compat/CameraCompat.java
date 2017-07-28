@@ -76,6 +76,7 @@ public class CameraCompat {
         return modes.contains(Camera.Parameters.FOCUS_MODE_AUTO);
     }
 
+    @Nullable
     public static Camera openCamera(int cameraId) {
         try {
             return Camera.open(cameraId);
