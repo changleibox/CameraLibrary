@@ -67,7 +67,7 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         int cameraId = CameraCompat.getCameraId(mCameraFacing);
         mCamera = CameraCompat.openCamera(cameraId);
         if (mCamera == null) {
-            CameraToastCompat.showText(this, R.string.camera_prompt_camera_failure);
+            CameraToastCompat.showText(this, R.string.camera_prompt_open_camera_failure);
             finish();
             return;
         }
@@ -187,6 +187,11 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
         }
         int cameraId = CameraCompat.getCameraId(mCameraFacing);
         mCamera = CameraCompat.openCamera(cameraId);
+        if (mCamera == null) {
+            CameraToastCompat.showText(this, R.string.camera_prompt_open_camera_failure);
+            finish();
+            return;
+        }
         mCameraPreview.switchCamera(mCamera, cameraId);
     }
 
