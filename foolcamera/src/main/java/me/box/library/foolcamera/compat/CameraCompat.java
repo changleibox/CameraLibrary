@@ -95,8 +95,16 @@ public class CameraCompat {
             if (isAutoFocusSupported(params)) {
                 params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
-            params.setSceneMode(Camera.Parameters.SCENE_MODE_AUTO);
-            params.setAutoWhiteBalanceLock(true);
+            camera.setParameters(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            final Camera.Parameters params = camera.getParameters();
+            params.setSceneMode(Camera.Parameters.SCENE_MODE_PORTRAIT);
+            params.setWhiteBalance(Camera.Parameters.WHITE_BALANCE_DAYLIGHT);
+            params.set("jpeg-quality", 100);
+            params.setColorEffect(Camera.Parameters.EFFECT_NONE);
             camera.setParameters(params);
         } catch (Exception e) {
             e.printStackTrace();
