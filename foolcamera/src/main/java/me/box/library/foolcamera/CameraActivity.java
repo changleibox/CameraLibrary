@@ -107,6 +107,18 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        reopenCamera(mCameraFacing);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setContentView(R.layout.camera_activity_camera);
@@ -122,10 +134,7 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mCamera != null) {
-            mCamera.release();
-            mCamera = null;
-        }
+        releaseCamera();
     }
 
     @Override
@@ -175,17 +184,29 @@ public class CameraActivity extends AppCompatActivity implements CameraPreview.P
     }
 
     public void onSwitchCamera(View view) {
-        mCameraPreview.stopPreviewDisplay();
-        if (mCamera != null) {
-            mCamera.release();
-            mCamera = null;
-        }
+        releaseCamera();
         if (mCameraFacing == Camera.CameraInfo.CAMERA_FACING_BACK && CameraCompat.hasFrontCamera(this)) {
             mCameraFacing = Camera.CameraInfo.CAMERA_FACING_FRONT;
         } else {
             mCameraFacing = Camera.CameraInfo.CAMERA_FACING_BACK;
         }
-        int cameraId = CameraCompat.getCameraId(mCameraFacing);
+        reopenCamera(mCameraFacing);
+    }
+
+    private void releaseCamera() {
+        try {
+            mCameraPreview.stopPreviewDisplay();
+            if (mCamera != null) {
+                mCamera.release();
+                mCamera = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void reopenCamera(int facing) {
+        int cameraId = CameraCompat.getCameraId(facing);
         mCamera = CameraCompat.openCamera(cameraId);
         if (mCamera == null) {
             CameraToastCompat.showText(this, R.string.camera_prompt_open_camera_failure);
