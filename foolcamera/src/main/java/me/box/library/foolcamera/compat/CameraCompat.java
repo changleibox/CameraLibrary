@@ -124,7 +124,11 @@ public class CameraCompat {
             Camera.Size pictureSize = CameraCompat.getOptimalPreviewSize(params.getSupportedPictureSizes(), width, height);
             params.setPreviewSize(previewSize.width, previewSize.height);
             params.setPictureSize(pictureSize.width, pictureSize.height);
-            camera.setParameters(params);
+            try {
+                camera.setParameters(params);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
