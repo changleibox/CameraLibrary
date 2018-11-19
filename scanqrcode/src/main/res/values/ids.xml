@@ -32,9 +32,6 @@
   <item type="id" name="qrcode_gridview" />
   <item type="id" name="qrcode_webview" />
   
-  <item type="id" name="qrcode_about_version_code">false</item>
-  <item type="id" name="qrcode_split">false</item>
-  
   <item type="id" name="qrcode_panelHandle" />
   <item type="id" name="qrcode_panelcContent" />
 </resources>
