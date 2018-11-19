@@ -97,7 +97,7 @@ def siteUrl = 'https://github.com/changleibox/CameraLibrary' // 项目的主页
 def gitUrl = 'https://github.com/changleibox/CameraLibrary.git' // Git仓库的url
 
 group = "me.box.library" // Maven Group ID for the artifact，一般填你唯一的包名
-version = "1.0.4" // This is the library version used when deploying the artifact
+version = "1.0.5" // This is the library version used when deploying the artifact
 
 install {
     repositories.mavenInstaller {
