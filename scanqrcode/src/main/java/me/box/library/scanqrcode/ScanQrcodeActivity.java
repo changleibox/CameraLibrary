@@ -54,8 +54,7 @@ import me.box.library.scanqrcode.provider.QrcodeResult;
  * <p/>
  * Box
  */
-@SuppressWarnings("deprecation")
-public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener, ScanImageTask.Callback {
+public class ScanQrcodeActivity extends AppCompatActivity implements Callback, OnClickListener, ScanImageTask.Callback, CaptureHandleImpl {
 
     public static final int CHOOSE_PICTURE = 0xfff;
 
@@ -93,8 +92,8 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             actionBar.setDisplayHomeAsUpEnabled(mQrcodeConfig.isDisplayHomeAsUpEnabled());
         }
 
-        mIbLight = (ImageButton) findViewById(R.id.qrcode_ib_light);
-        mFinderView = (ViewfinderView) findViewById(R.id.qrcode_viewfinder_view);
+        mIbLight = findViewById(R.id.qrcode_ib_light);
+        mFinderView = findViewById(R.id.qrcode_viewfinder_view);
 
         mIbLight.setVisibility(mQrcodeConfig.isHasFlashLight() ? View.VISIBLE : View.GONE);
 
@@ -144,12 +143,11 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onResume() {
         super.onResume();
 
-        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.qrcode_preview_view);
+        SurfaceView surfaceView = findViewById(R.id.qrcode_preview_view);
         if (surfaceView == null) {
             return;
         }
@@ -163,8 +161,8 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         mDecodeFormats = null;
         mCharacterSet = null;
 
-        AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
-        if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+        final AudioManager audioService = (AudioManager) getSystemService(AUDIO_SERVICE);
+        if (audioService != null && audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
             mQrcodeConfig.setPlayBeep(false);
         }
 
@@ -206,7 +204,6 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
                     initCamera(surfaceHolder);
                 } else {
                     surfaceHolder.addCallback(this);
-                    //noinspection deprecation
                     surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
                 }
             } else {
@@ -216,6 +213,7 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         }
     }
 
+    @Override
     public void handleDecode(Result result, Bitmap barcode) {
         cancelScanImageTask();
         onResultHandler(result.getText(), barcode);
@@ -272,14 +270,17 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
         hasSurface = false;
     }
 
+    @Override
     public ViewfinderView getViewfinderView() {
         return mFinderView;
     }
 
+    @Override
     public Handler getHandler() {
         return mHandler;
     }
 
+    @Override
     public void drawViewfinder() {
         mFinderView.drawViewfinder();
     }
@@ -306,7 +307,10 @@ public class ScanQrcodeActivity extends AppCompatActivity implements Callback, O
             Media.start(this, "sound/a0.mp3");
         }
         if (mQrcodeConfig.isVibrate()) {
-            ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VIBRATE_DURATION);
+            final Vibrator systemService = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            if (systemService != null) {
+                systemService.vibrate(VIBRATE_DURATION);
+            }
         }
     }
 

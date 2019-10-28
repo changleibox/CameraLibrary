@@ -19,8 +19,8 @@ import java.util.List;
  * <p/>
  * 操作闪光灯的工具类
  */
-@SuppressWarnings({"deprecation", "JavaDoc", "unused"})
-class FlashlightManager {
+@SuppressWarnings({"JavaDoc", "unused", "SameParameterValue"})
+public class FlashlightManager {
 
     private static final String TAG = FlashlightManager.class.getSimpleName();
     private static final Object iHardwareService;

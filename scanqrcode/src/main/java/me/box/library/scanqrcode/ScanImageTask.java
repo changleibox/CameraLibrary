@@ -1,5 +1,6 @@
 package me.box.library.scanqrcode;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -36,6 +37,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
     private byte[] mData;
     private Uri mUri;
     private String mQrcodePath;
+    @SuppressLint("StaticFieldLeak")
     private Context mContext;
     private Callback mCallback;
 
@@ -84,7 +86,7 @@ public final class ScanImageTask extends AsyncTask<Void, Void, QrcodeResult> {
         return (ScanImageTask) new ScanImageTask(data).setCallback(callback).execute();
     }
 
-    static ScanImageTask scan(Context context, Uri uri, Callback callback) {
+    public static ScanImageTask scan(Context context, Uri uri, Callback callback) {
         return (ScanImageTask) new ScanImageTask(context, uri).setCallback(callback).execute();
     }
 

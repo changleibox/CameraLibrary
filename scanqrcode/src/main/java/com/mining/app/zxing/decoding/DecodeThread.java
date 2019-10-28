@@ -15,7 +15,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
-import me.box.library.scanqrcode.ScanQrcodeActivity;
+import me.box.library.scanqrcode.CaptureHandleImpl;
 
 /**
  * This thread does all the heavy lifting of decoding the images.
@@ -23,13 +23,13 @@ import me.box.library.scanqrcode.ScanQrcodeActivity;
 final class DecodeThread extends Thread {
 
 	public static final String BARCODE_BITMAP = "barcode_bitmap";
-	private final ScanQrcodeActivity activity;
+	private final CaptureHandleImpl activity;
 	private final Hashtable<DecodeHintType, Object> hints;
 	private Handler handler;
 	private final CountDownLatch handlerInitLatch;
 
-	DecodeThread(ScanQrcodeActivity activity, Vector<BarcodeFormat> decodeFormats,
-                 String characterSet, ResultPointCallback resultPointCallback) {
+	DecodeThread(CaptureHandleImpl activity, Vector<BarcodeFormat> decodeFormats,
+				 String characterSet, ResultPointCallback resultPointCallback) {
 
 		this.activity = activity;
 		handlerInitLatch = new CountDownLatch(1);
