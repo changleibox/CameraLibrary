@@ -25,7 +25,7 @@ public final class QrcodeProvider {
     }
 
     public static void scanQrcode(@NonNull Activity activity, @NonNull QrcodeConfig config, Bitmap bitmap, int requestCode) {
-        Class<? extends ScanQrcodeActivity> subClass = config.getSubClass();
+        final Class<? extends Activity> subClass = config.getSubClass();
         Intent intent = new Intent(activity, subClass == null ? ScanQrcodeActivity.class : subClass);
         intent.putExtra(Key.KEY_SCAN_CONFIG, config);
         intent.putExtra(Key.KEY_SCAN_BITMAP, QrcodeResult.getBytes(bitmap));

@@ -1,5 +1,6 @@
 package me.box.library.scanqrcode.provider;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,7 +9,6 @@ import android.support.annotation.Dimension;
 import android.support.annotation.DrawableRes;
 
 import me.box.library.scanqrcode.R;
-import me.box.library.scanqrcode.ScanQrcodeActivity;
 
 /**
  * Created by box on 2017/7/18.
@@ -33,7 +33,7 @@ public final class QrcodeConfig implements Parcelable {
     private boolean needResultBitmap = true;
     private boolean displayHomeAsUpEnabled;
 
-    transient private Class<? extends ScanQrcodeActivity> subClass;
+    transient private Class<? extends Activity> subClass;
 
     public String getTitle() {
         return title;
@@ -163,11 +163,11 @@ public final class QrcodeConfig implements Parcelable {
         return this;
     }
 
-    Class<? extends ScanQrcodeActivity> getSubClass() {
+    Class<? extends Activity> getSubClass() {
         return subClass;
     }
 
-    public QrcodeConfig setSubClass(Class<? extends ScanQrcodeActivity> subClass) {
+    public QrcodeConfig setSubClass(Class<? extends Activity> subClass) {
         this.subClass = subClass;
         return this;
     }
@@ -175,7 +175,7 @@ public final class QrcodeConfig implements Parcelable {
     public QrcodeConfig() {
     }
 
-    public QrcodeConfig(Class<? extends ScanQrcodeActivity> subClass) {
+    public QrcodeConfig(Class<? extends Activity> subClass) {
         this.subClass = subClass;
     }
 
