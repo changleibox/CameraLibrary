@@ -19,7 +19,7 @@ import java.util.List;
  * <p/>
  * 操作闪光灯的工具类
  */
-@SuppressWarnings({"JavaDoc", "unused", "SameParameterValue"})
+@SuppressWarnings({"JavaDoc", "unused", "SameParameterValue", "WeakerAccess"})
 public class FlashlightManager {
 
     private static final String TAG = FlashlightManager.class.getSimpleName();
@@ -91,7 +91,7 @@ public class FlashlightManager {
      *
      * @param camera
      */
-    static void turnLightOn(Camera camera) {
+    public static void turnLightOn(Camera camera) {
         if (camera == null) {
             return;
         }
@@ -124,7 +124,7 @@ public class FlashlightManager {
      *
      * @param camera
      */
-    static void turnLightOff(Camera camera) {
+    public static void turnLightOff(Camera camera) {
         if (camera == null) {
             return;
         }
